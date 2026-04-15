@@ -1,7 +1,9 @@
 ﻿@page "/"
 @using System.Linq
 @using Microsoft.EntityFrameworkCore
+@using System.IO
 @using ProjectWebsite10032026.Data
+@using System
 @using ProjectWebsite10032026.Models
 
 @inject IJSRuntime JS
@@ -75,28 +77,42 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo">Mercantec</div>
+        <div class="logo" style="color:@AccentColor">@SiteName</div>
 
         <button @onclick='() => ScrollToSection("links")'>
-            Links
+            Links (@LinkCount)
         </button>
 
         <button @onclick='() => ScrollToSection("pdfs")'>
-            PDF Files
+            PDF Files (@DownloadCount)
         </button>
     </div>
 
     <!-- Content -->
-    <div class="content">
+    <div class="content @(IsCompact ? "compact" : string.Empty)">
 
-        <h1>Resource Portal</h1>
-        <p>Access useful links and PDF files.</p>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:8px;">
+            <div style="font-weight:600; color:#0f172a;">Name : @SiteName</div>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <input placeholder="Search links & files" @bind="SearchQuery" style="padding:8px; border-radius:6px; border:1px solid #d1d5db;" />
+                <button @onclick="RefreshAsync" style="padding:8px 12px; background:@AccentColor; color:white; border:none; border-radius:6px; cursor:pointer;">Refresh</button>
+                <label style="display:inline-flex; align-items:center; gap:6px; color:#334155;">
+                    <input type="checkbox" @bind="IsCompact" /> Compact
+                </label>
+            </div>
+        </div>
+
+        <h1 style="margin-top:0;">Resource Portal</h1>
+        <div style="display:flex; gap:12px; align-items:center; color:#475569; margin-bottom:12px;">
+            <div>Showing <strong>@FilteredLinkCount</strong> links and <strong>@FilteredDownloadCount</strong> files</div>
+            <div style="opacity:0.8; font-size:90%;">Last updated: @LastUpdated.ToString("g")</div>
+        </div>
 
         <!-- LINKS -->
         <section id="links">
             <h2>Useful Links</h2>
 
-            @foreach (var item in links)
+            @foreach (var item in FilteredLinks)
             {
                 <div class="card">
                     <a href="@item.Url" target="_blank">
@@ -110,11 +126,11 @@
         <section id="pdfs">
             <h2>PDF Files</h2>
 
-            @foreach (var item in downloads)
+            @foreach (var item in FilteredDownloads)
             {
                 <div class="card">
                     <a href="@item.FilePath" target="_blank">
-                        @item.Description
+                        @GetDisplayTitleForDownload(item)
                     </a>
                 </div>
             }
@@ -128,12 +144,37 @@
     List<Link> links = new();
     List<Download> downloads = new();
 
+    // Site-level settings driven from C# so the UI can be adjusted without changing CSS/HTML much
+    string SiteName { get; set; } = "MERCANTEC";
+    string AccentColor { get; set; } = "#60a5fa"; // soft blue for the logo
+
+    // UI state
+    string SearchQuery { get; set; } = string.Empty;
+    bool IsCompact { get; set; } = false;
+    DateTime LastUpdated { get; set; } = DateTime.Now;
+
+    int LinkCount => links?.Count ?? 0;
+    int DownloadCount => downloads?.Count ?? 0;
+
+    IEnumerable<Link> FilteredLinks => FilterItems(links, l => (l.Description ?? string.Empty), l => (l.Url ?? string.Empty));
+    IEnumerable<Download> FilteredDownloads => FilterItems(downloads, d => (d.Description ?? string.Empty), d => (d.FilePath ?? string.Empty));
+
+    int FilteredLinkCount => FilteredLinks?.Count() ?? 0;
+    int FilteredDownloadCount => FilteredDownloads?.Count() ?? 0;
+
     protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
     {
         try
         {
-            links = await Db.Links.ToListAsync();
-            downloads = await Db.Downloads.ToListAsync();
+            // load and sort for a cleaner UI
+            links = await Db.Links.OrderBy(l => l.Description).ToListAsync();
+            downloads = await Db.Downloads.OrderBy(d => d.Description).ToListAsync();
+            LastUpdated = DateTime.Now;
         }
         catch
         {
@@ -142,10 +183,32 @@
         }
     }
 
+    async Task RefreshAsync()
+    {
+        await LoadDataAsync();
+        StateHasChanged();
+    }
+
     async Task ScrollToSection(string id)
     {
         await JS.InvokeVoidAsync("eval",
             $"document.getElementById('{id}').scrollIntoView({{behavior:'smooth'}})");
     }
+
+    string GetDisplayTitleForDownload(Download d)
+    {
+        if (d is null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(d.Description)) return d.Description;
+        if (!string.IsNullOrWhiteSpace(d.FilePath)) return Path.GetFileName(d.FilePath);
+        return "Download";
+    }
+
+    IEnumerable<T> FilterItems<T>(IEnumerable<T> items, Func<T, string> primary, Func<T, string> secondary)
+    {
+        if (items is null) return Enumerable.Empty<T>();
+        if (string.IsNullOrWhiteSpace(SearchQuery)) return items;
+        var q = SearchQuery.Trim();
+        return items.Where(i => (primary(i)?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false)
+                                || (secondary(i)?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false));
+    }
 }
-..
