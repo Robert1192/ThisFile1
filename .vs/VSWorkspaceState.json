@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ProjectWebsite10032026",
+    "\\ProjectWebsite10032026\\Components",
+    "\\ProjectWebsite10032026\\Components\\Pages"
   ],
-  "SelectedNode": "\\ProjectWebsite10032026.slnx",
+  "SelectedNode": "\\ProjectWebsite10032026\\Components\\Pages\\Home.razor",
   "PreviewInSolutionExplorer": false
 }
