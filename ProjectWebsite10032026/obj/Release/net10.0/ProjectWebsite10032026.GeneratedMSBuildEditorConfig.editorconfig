@@ -14,7 +14,7 @@ build_property.RootNamespace = ProjectWebsite10032026
 build_property.ProjectDir = C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
-build_property.RazorLangVersion = 9.0
+build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026
@@ -26,16 +26,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/444.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1w0NDQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/NotFound.razor]

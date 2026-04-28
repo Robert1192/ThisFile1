@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ProjectWebsite10032026\\ProjectWebsite10032026.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\.gitattributes||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.gitattributes||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
@@ -23,6 +31,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ProjectWebsite10032026.csproj",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
+              "RelativeToolTip": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-28T06:48:55.614Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProjectWebsite10032026.csproj.user",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "RelativeToolTip": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2026-04-28T06:48:52.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": ".gitattributes",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\.gitattributes",
               "RelativeDocumentMoniker": ".gitattributes",
