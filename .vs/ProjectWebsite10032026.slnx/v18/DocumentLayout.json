@@ -31,15 +31,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ProjectWebsite10032026",
+              "Title": "ProjectWebsite10032026.csproj",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "RelativeToolTip": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-04-24T08:24:43.081Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T08:24:43.081Z"
             },
             {
               "$type": "Document",
@@ -49,7 +48,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\444.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\444.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\444.razor",
-              "ViewState": "AgIAAHcAAAAAAAAAAAAAAIUAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAxwIUAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-15T06:17:34.568Z",
               "EditorCaption": ""
