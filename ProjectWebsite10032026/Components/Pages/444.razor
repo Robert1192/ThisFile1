@@ -210,5 +210,7 @@
         var q = SearchQuery.Trim();
         return items.Where(i => (primary(i)?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false)
                                 || (secondary(i)?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false));
+
+
     }
 }
