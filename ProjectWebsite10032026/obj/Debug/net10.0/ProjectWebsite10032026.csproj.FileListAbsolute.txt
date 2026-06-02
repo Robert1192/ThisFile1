@@ -241,8 +241,6 @@ C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite1003
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\4wpqxfaoq6-{0}-63fj8s7r0e-63fj8s7r0e.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\jsam2wh971-{0}-0j3bgjxly4-0j3bgjxly4.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\5q0datqtfx-{0}-abdmv1u4y3-abdmv1u4y3.gz
-C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\u6hqnmiw9u-{0}-2i0r6wwb69-2i0r6wwb69.gz
-C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\cg87wd5oxm-{0}-iz83ucvm53-iz83ucvm53.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\yx2wc6fnpp-{0}-z99reggjiq-z99reggjiq.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\e683dd625e-{0}-z99reggjiq-z99reggjiq.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\staticwebassets.build.json
@@ -257,3 +255,5 @@ C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite1003
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ProjectWebsite10032026.pdb
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ProjectWebsite10032026.genruntimeconfig.cache
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ref\ProjectWebsite10032026.dll
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\u6hqnmiw9u-{0}-b9228eflpl-b9228eflpl.gz
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\cg87wd5oxm-{0}-2tj1sjhksk-2tj1sjhksk.gz
