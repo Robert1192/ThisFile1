@@ -38,8 +38,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/Links.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaW5rcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/PDFPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQREZQYWdlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Robert/source/repos/ProjectWebsite10032026/ThisFile1/ProjectWebsite10032026/Components/Pages/Weather.razor]

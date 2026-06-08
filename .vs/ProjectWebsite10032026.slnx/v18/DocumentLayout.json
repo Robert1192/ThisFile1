@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\pdfpage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\pdfpage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\links.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\links.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\444.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\444.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -66,7 +78,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,7 +86,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
+              "Title": "PDFPage.razor",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\PDFPage.razor",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\PDFPage.razor",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\PDFPage.razor",
+              "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\PDFPage.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-04T11:08:40.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProjectWebsite10032026.csproj.user",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "RelativeToolTip": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj.user",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2026-06-04T11:08:05.658Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Links.razor",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Links.razor",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Links.razor",
+              "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-04T11:07:53.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "MainLayout.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
@@ -86,7 +137,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Download.cs",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Models\\Download.cs",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Models\\Download.cs",
@@ -98,7 +149,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Models\\AppDbContext.cs",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Models\\AppDbContext.cs",
@@ -110,7 +161,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Routes.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Routes.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Routes.razor",
@@ -122,7 +173,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "App.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\App.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\App.razor",
@@ -134,7 +185,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\_Imports.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\_Imports.razor",
@@ -146,7 +197,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "Weather.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Weather.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Weather.razor",
@@ -158,20 +209,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "444.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\444.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\444.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\444.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\444.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAAL4AAAAAAAAAAAAkwNcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-15T06:17:34.568Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Program.cs",
@@ -183,7 +234,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "NotFound.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\NotFound.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\NotFound.razor",
@@ -195,7 +246,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\appsettings.json",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\appsettings.json",
@@ -207,7 +258,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "Error.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Error.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Error.razor",
@@ -219,7 +270,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "ProjectWebsite10032026.csproj",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
@@ -231,7 +282,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "Counter.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Counter.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Counter.razor",

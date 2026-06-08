@@ -1,0 +1,27 @@
+﻿@using ProjectWebsite10032026.Data
+@page "/pdfs"
+@using ProjectWebsite10032026.Models
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext Db
+
+<h1>PDF Files</h1>
+
+@foreach (var item in downloads)
+{
+    <div class="card">
+        <a href="@item.FilePath" target="_blank">
+            @item.Description
+        </a>
+    </div>
+}
+
+@code {
+    List<Download> downloads = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        downloads = await Db.Downloads
+            .OrderBy(d => d.Description)
+            .ToListAsync();
+    }
+}

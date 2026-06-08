@@ -1,0 +1,25 @@
+﻿@page "/links"
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext Db
+
+<h1>Useful Links</h1>
+
+@foreach (var item in links)
+{
+    <div class="card">
+        <a href="@item.Url" target="_blank">
+            @item.Description
+        </a>
+    </div>
+}
+
+@code {
+    List<Link> links = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        links = await Db.Links
+            .OrderBy(l => l.Description)
+            .ToListAsync();
+    }
+}
