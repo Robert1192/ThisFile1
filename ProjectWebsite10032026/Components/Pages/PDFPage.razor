@@ -1,18 +1,30 @@
 ﻿@using ProjectWebsite10032026.Data
-@page "/pdfs"
+@page "/pdf"
+@page "/pdffiles"
 @using ProjectWebsite10032026.Models
 @using Microsoft.EntityFrameworkCore
-@inject AppDbContext Db
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
 
-<h1>PDF Files</h1>
+<h3>PDF Files</h3>
 
-@foreach (var item in downloads)
+<div class="mb-3">
+    <NavLink class="btn btn-outline-primary" href="/">Home</NavLink>
+</div>
+
+@if (downloads == null || downloads.Count == 0)
 {
-    <div class="card">
-        <a href="@item.FilePath" target="_blank">
-            @item.Description
-        </a>
-    </div>
+    <p>No files found.</p>
+}
+else
+{
+    @foreach (var item in downloads)
+    {
+        <div class="card mb-2">
+            <a href="@item.FilePath" target="_blank">
+                @item.Description
+            </a>
+        </div>
+    }
 }
 
 @code {
@@ -20,8 +32,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        downloads = await Db.Downloads
-            .OrderBy(d => d.Description)
+        using var db = DbFactory.CreateDbContext();
+        downloads = await db.Downloads
+            .OrderBy(d => d.Description ?? string.Empty)
             .ToListAsync();
     }
 }

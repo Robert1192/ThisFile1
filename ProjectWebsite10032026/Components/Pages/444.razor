@@ -7,7 +7,7 @@
 @using ProjectWebsite10032026.Models
 
 @inject IJSRuntime JS
-@inject AppDbContext Db
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
 
 <style>
     body {
@@ -71,6 +71,41 @@
             font-size: 18px;
             color: #2563eb;
         }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: #1e90ff;
+            }
+
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+
+            .btn-secondary:hover {
+                background: #475569;
+            }
+
 </style>
 
 <div class="layout">
@@ -115,7 +150,7 @@
             @foreach (var item in FilteredLinks)
             {
                 <div class="card">
-                    <a href="@item.Url" target="_blank">
+                    <a href="@item.Url" target="_blank" rel="noopener noreferrer">
                         @item.Description
                     </a>
                 </div>
@@ -129,11 +164,23 @@
             @foreach (var item in FilteredDownloads)
             {
                 <div class="card">
-                    <a href="@item.FilePath" target="_blank">
+                    <a href="@item.FilePath" target="_blank" rel="noopener noreferrer">
                         @GetDisplayTitleForDownload(item)
                     </a>   
                 </div>
             }
+        </section>
+
+        <!-- Welcome Section -->
+        <section id="welcome">
+            <h1>Welcome</h1>
+
+            <p>Use the quick links below:</p>
+
+            <div class="btn-group" role="group">
+                <NavLink class="btn btn-primary" href="/links">Links</NavLink>
+                <NavLink class="btn btn-secondary" href="/pdf">PDFs</NavLink>
+            </div>
         </section>
 
     </div>
@@ -172,8 +219,9 @@
         try
         {
             // load and sort for a cleaner UI
-            links = await Db.Links.OrderBy(l => l.Description).ToListAsync();
-            downloads = await Db.Downloads.OrderBy(d => d.Description).ToListAsync();
+            using var db = DbFactory.CreateDbContext();
+            links = await db.Links.OrderBy(l => l.Description).ToListAsync();
+            downloads = await db.Downloads.OrderBy(d => d.Description).ToListAsync();
             LastUpdated = DateTime.Now;
         }
         catch

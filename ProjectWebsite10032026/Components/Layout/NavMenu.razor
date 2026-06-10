@@ -1,6 +1,6 @@
 ﻿@using ProjectWebsite10032026.Models
 @using Microsoft.EntityFrameworkCore
-@inject ProjectWebsite10032026.Data.AppDbContext Db
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -21,17 +21,17 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="links">
+            <a class="nav-link" href="/links">
                 <span class="bi bi-link-45deg"></span>
                 Links
-            </NavLink>
+            </a>
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="pdfs">
+            <a class="nav-link" href="/pdfs">
                 <span class="bi bi-file-earmark-pdf"></span>
                 PDF Files
-            </NavLink>
+            </a>
         </div>
 
         @if (downloads is not null && downloads.Any())
@@ -40,9 +40,9 @@
                 <div class="nav-header text-muted px-2">All PDFs</div>
                 @foreach (var d in downloads)
                 {
-                    <NavLink class="nav-link child-link" href="@($"/pdfviewer/{d.ID}")">
+                    <a class="nav-link child-link" href="@($"/pdfviewer/{d.ID}")" target="_blank" rel="noopener noreferrer">
                         @(!string.IsNullOrWhiteSpace(d.Description) ? d.Description : d.FileName)
-                    </NavLink>
+                    </a>
                 }
             </div>
         }
@@ -57,7 +57,8 @@
     {
         try
         {
-            downloads = await Db.Downloads.OrderBy(d => d.Description).ToListAsync();
+            using var db = DbFactory.CreateDbContext();
+            downloads = await db.Downloads.OrderBy(d => d.Description).ToListAsync();
         }
         catch
         {

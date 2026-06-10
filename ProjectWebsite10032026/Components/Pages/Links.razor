@@ -2,26 +2,42 @@
 @using ProjectWebsite10032026.Models
 @page "/links"
 @using Microsoft.EntityFrameworkCore
-@inject AppDbContext Db
+@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+@inject Microsoft.Extensions.Logging.ILogger<ProjectWebsite10032026.Components.Pages.Links> Logger
 
 <h1>Useful Links</h1>
 
 @foreach (var item in links)
 {
     <div class="card">
-        <a href="@item.Url" target="_blank">
+        <a href="@item.Url" target="_blank" rel="noopener noreferrer">
             @item.Description
         </a>
     </div>
 }
 
+<div class="mt-3">
+    <NavLink class="btn btn-outline-primary" href="/">Home</NavLink>
+</div>
+
 @code {
     List<Link> links = new();
+    string? loadError;
 
     protected override async Task OnInitializedAsync()
     {
-        links = await Db.Links
-            .OrderBy(l => l.Description)
-            .ToListAsync();
+        try
+        {
+            using var db = DbFactory.CreateDbContext();
+            links = await db.Links
+                .OrderBy(l => l.Description)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            // Log details for diagnosis and show a friendly message in UI
+            Logger.LogError(ex, "Failed to load Links from database");
+            loadError = "Unable to load links. Please check database configuration.";
+        }
     }
 }
