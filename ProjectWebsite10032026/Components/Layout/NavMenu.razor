@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using ProjectWebsite10032026.Models
+@using Microsoft.EntityFrameworkCore
+@inject ProjectWebsite10032026.Data.AppDbContext Db
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">MERCANTEC</a>
     </div>
@@ -30,5 +34,34 @@
             </NavLink>
         </div>
 
+        @if (downloads is not null && downloads.Any())
+        {
+            <div class="nav-item px-3 mt-2">
+                <div class="nav-header text-muted px-2">All PDFs</div>
+                @foreach (var d in downloads)
+                {
+                    <NavLink class="nav-link child-link" href="@($"/pdfviewer/{d.ID}")">
+                        @(!string.IsNullOrWhiteSpace(d.Description) ? d.Description : d.FileName)
+                    </NavLink>
+                }
+            </div>
+        }
+
     </nav>
 </div>
+
+@code {
+    List<Download>? downloads;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            downloads = await Db.Downloads.OrderBy(d => d.Description).ToListAsync();
+        }
+        catch
+        {
+            downloads = new List<Download>();
+        }
+    }
+}
