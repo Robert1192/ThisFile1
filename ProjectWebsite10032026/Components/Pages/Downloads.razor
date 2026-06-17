@@ -1,20 +1,23 @@
 @using Microsoft.EntityFrameworkCore
-@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+@inject IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @inject Microsoft.Extensions.Logging.ILogger<ProjectWebsite10032026.Components.Pages.Links> Logger
+
 @page "/downloads"
 
 <h3>Downloads</h3>
 
 <div class="mb-4 add-form">
-    <label for="newDoc" class="form-label">Add new document</label>
+    <label class="form-label">Add new document</label>
+
     <div class="input-group">
-        <input id="newDoc" class="form-control" placeholder="Description" @bind="newDocDesc" />
+        <input class="form-control" placeholder="Description" @bind="newDocDesc" />
         <input class="form-control" placeholder="File path or URL" @bind="newDocPath" />
+
         <button type="button" class="btn btn-primary" @onclick="AddDoc" disabled="@isSaving">
             @if (isSaving)
             {
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="spinner-border spinner-border-sm"></span>
             }
             else
             {
@@ -22,6 +25,7 @@
             }
         </button>
     </div>
+
     @if (!string.IsNullOrEmpty(message))
     {
         <div class="mt-2 alert alert-@messageType p-2">@message</div>
@@ -30,7 +34,7 @@
 
 <p>Available downloads (static files in wwwroot/files):</p>
 
-@if (staticFiles == null || staticFiles.Count == 0)
+@if (staticFiles.Count == 0)
 {
     <p>No static files found in /files.</p>
 }
@@ -38,9 +42,12 @@ else
 {
     @foreach (var f in staticFiles)
     {
-        <div class="card link-card">
-            <a href="@f.Url" target="_blank" rel="noopener noreferrer" download>@f.DisplayName</a>
-            <button class="btn btn-sm btn-outline-secondary ms-2" @onclick="async () => await ImportStaticFile(f)">Import to DB</button>
+        <div class="card link-card p-2 mb-2">
+            <a href="@f.Url" target="_blank" download>@f.DisplayName</a>
+            <button class="btn btn-sm btn-outline-secondary ms-2"
+                    @onclick="async () => await ImportStaticFile(f)">
+                Import to DB
+            </button>
         </div>
     }
 }
@@ -49,7 +56,7 @@ else
 
 <p>Downloads from database:</p>
 
-@if (downloads == null || downloads.Count == 0)
+@if (downloads.Count == 0)
 {
     <p>No files found.</p>
 }
@@ -57,8 +64,10 @@ else
 {
     @foreach (var item in downloads)
     {
-        <div class="card link-card">
-            <a href="@item.FilePath" target="_blank" rel="noopener noreferrer" download>@(string.IsNullOrWhiteSpace(item.FileName) ? item.Description : item.FileName)</a>
+        <div class="card link-card p-2 mb-2">
+            <a href="@item.FilePath" target="_blank" download>
+                @(string.IsNullOrWhiteSpace(item.FileName) ? item.Description : item.FileName)
+            </a>
         </div>
     }
 }
@@ -69,8 +78,11 @@ else
 
 @code {
     private List<ProjectWebsite10032026.Models.Download> downloads = new();
+    private List<(string Url, string DisplayName)> staticFiles = new();
+
     private string newDocDesc = string.Empty;
     private string newDocPath = string.Empty;
+
     private bool isSaving = false;
     private string message = string.Empty;
     private string messageType = "info";
@@ -86,61 +98,76 @@ else
         try
         {
             using var db = DbFactory.CreateDbContext();
+
             downloads = await db.Downloads
+                .AsNoTracking()
                 .OrderBy(d => d.Description ?? string.Empty)
                 .ToListAsync();
         }
         catch (Exception ex)
         {
-            Logger?.LogError(ex, "Failed to load Downloads from database");
-            downloads = new List<ProjectWebsite10032026.Models.Download>();
+            Logger.LogError(ex, "Failed to load Downloads from database");
+            downloads = new();
         }
     }
 
-    private List<(string Url, string DisplayName)> staticFiles = new();
-
     private async Task LoadStaticFilesAsync()
     {
-        staticFiles.Clear();
         try
         {
-            var webRoot = Env.WebRootPath; // typically wwwroot
-            var filesDir = System.IO.Path.Combine(webRoot ?? ".", "files");
-            if (System.IO.Directory.Exists(filesDir))
+            staticFiles.Clear();
+
+            var webRoot = Env.WebRootPath;
+            var filesDir = Path.Combine(webRoot ?? ".", "files");
+
+            if (Directory.Exists(filesDir))
             {
-                var files = System.IO.Directory.EnumerateFiles(filesDir)
-                    .Where(p => p.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                var files = Directory.EnumerateFiles(filesDir)
+                    .Where(p => p.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase));
+
                 foreach (var p in files)
                 {
-                    var name = System.IO.Path.GetFileName(p);
-                    var url = $"/files/{Uri.EscapeDataString(name)}";
-                    staticFiles.Add((url, name));
+                    var name = Path.GetFileName(p);
+                    staticFiles.Add((
+                        Url: $"/files/{Uri.EscapeDataString(name)}",
+                        DisplayName: name
+                    ));
                 }
             }
         }
         catch (Exception ex)
         {
-            Logger?.LogError(ex, "Failed to load static files");
+            Logger.LogError(ex, "Failed to load static files");
         }
+
         await Task.CompletedTask;
     }
 
     private async Task ImportStaticFile((string Url, string DisplayName) f)
     {
-        var doc = new ProjectWebsite10032026.Models.Download { Description = f.DisplayName, FilePath = f.Url, FileName = f.DisplayName };
         try
         {
             using var db = DbFactory.CreateDbContext();
+
+            var doc = new ProjectWebsite10032026.Models.Download
+            {
+                Description = f.DisplayName,
+                FilePath = f.Url,
+                FileName = f.DisplayName
+            };
+
             db.Downloads.Add(doc);
             await db.SaveChangesAsync();
+
             downloads.Insert(0, doc);
+
             messageType = "info";
             message = "Imported file to Downloads.";
         }
         catch (Exception ex)
         {
-            Logger?.LogError(ex, "Failed to import static file");
+            Logger.LogError(ex, "Failed to import static file");
+
             messageType = "danger";
             message = "Failed to import file to database.";
         }
@@ -149,7 +176,9 @@ else
     private async Task AddDoc()
     {
         message = string.Empty;
-        if (string.IsNullOrWhiteSpace(newDocDesc) || string.IsNullOrWhiteSpace(newDocPath))
+
+        if (string.IsNullOrWhiteSpace(newDocDesc) ||
+            string.IsNullOrWhiteSpace(newDocPath))
         {
             messageType = "danger";
             message = "Please fill both fields.";
@@ -159,39 +188,40 @@ else
         if (!IsValidPathOrUrl(newDocPath))
         {
             messageType = "danger";
-            message = "Please enter a valid http(s) URL or a valid file path.";
+            message = "Invalid URL or file path.";
             return;
         }
 
-        var doc = new ProjectWebsite10032026.Models.Download { Description = newDocDesc, FilePath = newDocPath };
-        try
-        {
-            if (string.IsNullOrWhiteSpace(doc.FileName))
-            {
-                var fileName = System.IO.Path.GetFileName(newDocPath);
-                if (!string.IsNullOrWhiteSpace(fileName)) doc.FileName = fileName;
-            }
-        }
-        catch { }
-
-        downloads.Insert(0, doc);
-        StateHasChanged();
         isSaving = true;
+
         try
         {
+            var doc = new ProjectWebsite10032026.Models.Download
+            {
+                Description = newDocDesc,
+                FilePath = newDocPath,
+                FileName = Path.GetFileName(newDocPath)
+            };
+
             using var db = DbFactory.CreateDbContext();
+
             db.Downloads.Add(doc);
             await db.SaveChangesAsync();
-            newDocDesc = string.Empty; newDocPath = string.Empty;
+
+            downloads.Insert(0, doc);
+
+            newDocDesc = string.Empty;
+            newDocPath = string.Empty;
+
             messageType = "info";
             message = "Document added.";
         }
         catch (Exception ex)
         {
-            Logger?.LogError(ex, "Failed to add document");
-            downloads.Remove(doc);
+            Logger.LogError(ex, "Failed to add document");
+
             messageType = "danger";
-            message = "Failed to add document. It was not saved to the database.";
+            message = "Failed to add document.";
         }
         finally
         {
@@ -202,20 +232,14 @@ else
     private bool IsValidPathOrUrl(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) return false;
+
         if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
         {
-            if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps || uri.IsFile)
-                return true;
+            return uri.Scheme == Uri.UriSchemeHttp ||
+                   uri.Scheme == Uri.UriSchemeHttps ||
+                   uri.IsFile;
         }
-        try
-        {
-            if (System.IO.Path.IsPathRooted(path))
-            {
-                var invalid = System.IO.Path.GetInvalidPathChars();
-                return path.IndexOfAny(invalid) == -1;
-            }
-        }
-        catch { }
-        return false;
+
+        return Path.IsPathRooted(path);
     }
 }
