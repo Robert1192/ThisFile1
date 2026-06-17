@@ -3,7 +3,9 @@
     public class Download
     {
         public int ID { get; set; }
+        // Optional display name for the file
         public string? FileName { get; set; }
+        // Path or URL to the file
         public string? FilePath { get; set; }
         public string? Description { get; set; }
     }

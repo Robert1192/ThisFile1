@@ -25,7 +25,7 @@
     </div>
     @if (!string.IsNullOrEmpty(message))
     {
-        <div class="mt-2 alert alert-info p-2">@message</div>
+        <div class="mt-2 alert alert-@messageType p-2">@message</div>
     }
 </div>
 
@@ -40,7 +40,7 @@ else
     @foreach (var l in links)
     {
         <div class="card link-card">
-            <a href="@l.Url" target="_blank">@l.Description</a>
+            <a href="@l.Url" target="_blank" rel="noopener noreferrer">@l.Description</a>
         </div>
     }
 }
@@ -55,10 +55,12 @@ else
     string newLinkUrl = string.Empty;
     bool isSaving = false;
     string message = string.Empty;
+    string messageType = "info"; // "info" or "danger"
 
     protected override async Task OnInitializedAsync()
     {
         await LoadLinks();
+        await EnsureSeedLinksAsync();
     }
 
     async Task LoadLinks()
@@ -70,6 +72,39 @@ else
                 .OrderBy(l => l.Description ?? string.Empty)
                 .ToListAsync();
         }
+
+    // Ensure the two requested links exist in the database; insert if missing.
+    async Task EnsureSeedLinksAsync()
+    {
+        var seed = new[] {
+            new ProjectWebsite10032026.Models.Link { Description = "Bliv godkendt som lærested", Url = "https://iu.dk/skoler-og-virksomheder/oplaering/bliv-godkendt-som-laerested" },
+            new ProjectWebsite10032026.Models.Link { Description = "Bekendtgørelse om Data- og kommunikationsuddannelsen", Url = "https://www.retsinformation.dk/eli/lta/2026/182" }
+        };
+
+        try
+        {
+            using var db = DbFactory.CreateDbContext();
+            bool changed = false;
+            foreach (var s in seed)
+            {
+                var exists = await db.Links.AnyAsync(x => x.Url == s.Url);
+                if (!exists)
+                {
+                    db.Links.Add(s);
+                    changed = true;
+                }
+            }
+            if (changed)
+            {
+                await db.SaveChangesAsync();
+                await LoadLinks();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to seed default links: {ex.Message}");
+        }
+    }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Failed to load Links from database: {ex.Message}");
@@ -82,7 +117,16 @@ else
         message = string.Empty;
         if (string.IsNullOrWhiteSpace(newLinkDesc) || string.IsNullOrWhiteSpace(newLinkUrl))
         {
+            messageType = "danger";
             message = "Please fill both fields.";
+            return;
+        }
+
+        // basic URL validation
+        if (!Uri.TryCreate(newLinkUrl, UriKind.Absolute, out var parsed) || !(parsed.Scheme == Uri.UriSchemeHttp || parsed.Scheme == Uri.UriSchemeHttps))
+        {
+            messageType = "danger";
+            message = "Please enter a valid http(s) URL.";
             return;
         }
 
@@ -97,6 +141,7 @@ else
             db.Links.Add(link);
             await db.SaveChangesAsync();
             newLinkDesc = string.Empty; newLinkUrl = string.Empty;
+            messageType = "info";
             message = "Link added.";
         }
         catch (Exception ex)
@@ -104,6 +149,7 @@ else
             Console.Error.WriteLine($"Failed to add link: {ex.Message}");
             // rollback optimistic update
             links.Remove(link);
+            messageType = "danger";
             message = "Failed to add link. It was not saved to the database.";
         }
         finally

@@ -1,5 +1,6 @@
 @using Microsoft.EntityFrameworkCore
 @inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 @inject Microsoft.Extensions.Logging.ILogger<ProjectWebsite10032026.Components.Pages.Links> Logger
 @page "/downloads"
 
@@ -23,11 +24,30 @@
     </div>
     @if (!string.IsNullOrEmpty(message))
     {
-        <div class="mt-2 alert alert-info p-2">@message</div>
+        <div class="mt-2 alert alert-@messageType p-2">@message</div>
     }
 </div>
 
-<p>Available downloads:</p>
+<p>Available downloads (static files in wwwroot/files):</p>
+
+@if (staticFiles == null || staticFiles.Count == 0)
+{
+    <p>No static files found in /files.</p>
+}
+else
+{
+    @foreach (var f in staticFiles)
+    {
+        <div class="card link-card">
+            <a href="@f.Url" target="_blank" rel="noopener noreferrer" download>@f.DisplayName</a>
+            <button class="btn btn-sm btn-outline-secondary ms-2" @onclick="() => ImportStaticFile(f)">Import to DB</button>
+        </div>
+    }
+}
+
+<hr />
+
+<p>Downloads from database:</p>
 
 @if (downloads == null || downloads.Count == 0)
 {
@@ -38,7 +58,7 @@ else
     @foreach (var item in downloads)
     {
         <div class="card link-card">
-            <a href="@item.FilePath" target="_blank">@item.Description</a>
+            <a href="@item.FilePath" target="_blank" rel="noopener noreferrer" download>@(string.IsNullOrWhiteSpace(item.FileName) ? item.Description : item.FileName)</a>
         </div>
     }
 }
@@ -53,10 +73,12 @@ else
     string newDocPath = string.Empty;
     bool isSaving = false;
     string message = string.Empty;
+    string messageType = "info";
 
     protected override async Task OnInitializedAsync()
     {
         await LoadDownloads();
+        await LoadStaticFilesAsync();
     }
 
     async Task LoadDownloads()
@@ -68,6 +90,55 @@ else
                 .OrderBy(d => d.Description ?? string.Empty)
                 .ToListAsync();
         }
+
+    List<(string Url, string DisplayName)> staticFiles = new();
+
+    async Task LoadStaticFilesAsync()
+    {
+        staticFiles.Clear();
+        try
+        {
+            var webRoot = Env.WebRootPath; // typically wwwroot
+            var filesDir = System.IO.Path.Combine(webRoot ?? ".", "files");
+            if (System.IO.Directory.Exists(filesDir))
+            {
+                var files = System.IO.Directory.EnumerateFiles(filesDir)
+                    .Where(p => p.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                foreach (var p in files)
+                {
+                    var name = System.IO.Path.GetFileName(p);
+                    var url = $"/files/{Uri.EscapeDataString(name)}";
+                    staticFiles.Add((url, name));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to load static files: {ex.Message}");
+        }
+    }
+
+    async Task ImportStaticFile((string Url, string DisplayName) f)
+    {
+        // create DB record pointing to the static file
+        var doc = new ProjectWebsite10032026.Models.Download { Description = f.DisplayName, FilePath = f.Url, FileName = f.DisplayName };
+        try
+        {
+            using var db = DbFactory.CreateDbContext();
+            db.Downloads.Add(doc);
+            await db.SaveChangesAsync();
+            downloads.Insert(0, doc);
+            messageType = "info";
+            message = "Imported file to Downloads.";
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to import static file: {ex.Message}");
+            messageType = "danger";
+            message = "Failed to import file to database.";
+        }
+    }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Failed to load Downloads from database: {ex.Message}");
@@ -80,29 +151,77 @@ else
         message = string.Empty;
         if (string.IsNullOrWhiteSpace(newDocDesc) || string.IsNullOrWhiteSpace(newDocPath))
         {
+            messageType = "danger";
             message = "Please fill both fields.";
             return;
         }
 
+        if (!IsValidPathOrUrl(newDocPath))
+        {
+            messageType = "danger";
+            message = "Please enter a valid http(s) URL or a valid file path.";
+            return;
+        }
+
         var doc = new ProjectWebsite10032026.Models.Download { Description = newDocDesc, FilePath = newDocPath };
+        // auto-fill FileName when possible
+        try
+        {
+            if (string.IsNullOrWhiteSpace(doc.FileName))
+            {
+                var fileName = System.IO.Path.GetFileName(newDocPath);
+                if (!string.IsNullOrWhiteSpace(fileName)) doc.FileName = fileName;
+            }
+        }
+        catch { }
+
+        // optimistic UI update
+        downloads.Insert(0, doc);
+        StateHasChanged();
         isSaving = true;
         try
         {
             using var db = DbFactory.CreateDbContext();
             db.Downloads.Add(doc);
             await db.SaveChangesAsync();
-            downloads.Insert(0, doc);
             newDocDesc = string.Empty; newDocPath = string.Empty;
+            messageType = "info";
             message = "Document added.";
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Failed to add document: {ex.Message}");
-            message = "Failed to add document. Check console for details.";
+            // rollback optimistic update
+            downloads.Remove(doc);
+            messageType = "danger";
+            message = "Failed to add document. It was not saved to the database.";
         }
         finally
         {
             isSaving = false;
         }
+    }
+
+    bool IsValidPathOrUrl(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return false;
+        // absolute URI (http/https/file)
+        if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
+        {
+            if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps || uri.IsFile)
+                return true;
+        }
+        // Windows absolute path e.g. C:\folder\file
+        try
+        {
+            if (System.IO.Path.IsPathRooted(path))
+            {
+                // rudimentary invalid char check
+                var invalid = System.IO.Path.GetInvalidPathChars();
+                return path.IndexOfAny(invalid) == -1;
+            }
+        }
+        catch { }
+        return false;
     }
 }
