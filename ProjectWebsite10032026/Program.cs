@@ -18,8 +18,9 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
         sqlOptions =>
         {
             sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(10));
+                5,
+                TimeSpan.FromSeconds(10),
+                null);
         }));
 
 var app = builder.Build();

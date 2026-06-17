@@ -1,8 +1,9 @@
 ﻿@using ProjectWebsite10032026.Data
 @using ProjectWebsite10032026.Models
-@page "/"
 @using Microsoft.EntityFrameworkCore
-@inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+@inject IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+
+@page "/"
 
 <h3>Links</h3>
 
@@ -19,9 +20,17 @@ else
     <div class="list-group">
         @foreach (var link in links)
         {
-            <a class="list-group-item list-group-item-action" href="@link.Url" target="_blank" rel="noopener noreferrer"> 
+            <a class="list-group-item list-group-item-action"
+               href="@link.Url"
+               target="_blank"
+               rel="noopener noreferrer">
+
                 <strong>@(string.IsNullOrWhiteSpace(link.Category) ? "Link" : link.Category)</strong>
-                <div>@(string.IsNullOrWhiteSpace(link.Description) ? link.Url : link.Description)</div>
+
+                <div>
+                    @(string.IsNullOrWhiteSpace(link.Description) ? link.Url : link.Description)
+                </div>
+
             </a>
         }
     </div>
@@ -32,16 +41,12 @@ else
 </div>
 
 @code {
-    private List<ProjectWebsite10032026.Models.Link> links;
+    private List<ProjectWebsite10032026.Models.Link> links = new();
 
     protected override async Task OnInitializedAsync()
     {
+        await EnsureSeedLinksAsyncSafe();
         await LoadLinks();
-        if (links == null || links.Count == 0)
-        {
-            await EnsureSeedLinksAsync();
-            await LoadLinks();
-        }
     }
 
     private async Task LoadLinks()
@@ -49,7 +54,9 @@ else
         try
         {
             using var db = DbFactory.CreateDbContext();
+
             links = await db.Links
+                .AsNoTracking()
                 .OrderBy(l => l.Category ?? string.Empty)
                 .ThenBy(l => l.Description ?? string.Empty)
                 .ToListAsync();
@@ -57,25 +64,29 @@ else
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Failed to load links: {ex.Message}");
-            links = new List<ProjectWebsite10032026.Models.Link>();
+            links = new();
         }
     }
 
-    private async Task EnsureSeedLinksAsync()
+    private async Task EnsureSeedLinksAsyncSafe()
     {
         try
         {
             using var db = DbFactory.CreateDbContext();
-            // two requested links
-            var entries = new[]
+
+            var existingUrls = await db.Links
+                .Select(l => l.Url)
+                .ToListAsync();
+
+            var entries = new List<ProjectWebsite10032026.Models.Link>
             {
-                new ProjectWebsite10032026.Models.Link
+                new()
                 {
                     Category = "Guidance",
                     Description = "Bliv godkendt som lærested - Information for schools and companies",
                     Url = "https://iu.dk/skoler-og-virksomheder/oplaering/bliv-godkendt-som-laerested"
                 },
-                new ProjectWebsite10032026.Models.Link
+                new()
                 {
                     Category = "Regulation",
                     Description = "Bekendtgørelse om Data- og kommunikationsuddannelsen",
@@ -83,16 +94,13 @@ else
                 }
             };
 
-            var needAdd = new List<ProjectWebsite10032026.Models.Link>();
-            foreach (var e in entries)
-            {
-                var exists = await db.Links.AnyAsync(l => l.Url == e.Url);
-                if (!exists) needAdd.Add(e);
-            }
+            var toAdd = entries
+                .Where(e => !existingUrls.Contains(e.Url))
+                .ToList();
 
-            if (needAdd.Count > 0)
+            if (toAdd.Count > 0)
             {
-                db.Links.AddRange(needAdd);
+                db.Links.AddRange(toAdd);
                 await db.SaveChangesAsync();
             }
         }
