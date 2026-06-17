@@ -40,7 +40,7 @@ else
     {
         <div class="card link-card">
             <a href="@f.Url" target="_blank" rel="noopener noreferrer" download>@f.DisplayName</a>
-            <button class="btn btn-sm btn-outline-secondary ms-2" @onclick="() => ImportStaticFile(f)">Import to DB</button>
+            <button class="btn btn-sm btn-outline-secondary ms-2" @onclick="async () => await ImportStaticFile(f)">Import to DB</button>
         </div>
     }
 }
@@ -68,12 +68,12 @@ else
 </div>
 
 @code {
-    List<ProjectWebsite10032026.Models.Download> downloads = new();
-    string newDocDesc = string.Empty;
-    string newDocPath = string.Empty;
-    bool isSaving = false;
-    string message = string.Empty;
-    string messageType = "info";
+    private List<ProjectWebsite10032026.Models.Download> downloads = new();
+    private string newDocDesc = string.Empty;
+    private string newDocPath = string.Empty;
+    private bool isSaving = false;
+    private string message = string.Empty;
+    private string messageType = "info";
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,7 +81,7 @@ else
         await LoadStaticFilesAsync();
     }
 
-    async Task LoadDownloads()
+    private async Task LoadDownloads()
     {
         try
         {
@@ -90,10 +90,16 @@ else
                 .OrderBy(d => d.Description ?? string.Empty)
                 .ToListAsync();
         }
+        catch (Exception ex)
+        {
+            Logger?.LogError(ex, "Failed to load Downloads from database");
+            downloads = new List<ProjectWebsite10032026.Models.Download>();
+        }
+    }
 
-    List<(string Url, string DisplayName)> staticFiles = new();
+    private List<(string Url, string DisplayName)> staticFiles = new();
 
-    async Task LoadStaticFilesAsync()
+    private async Task LoadStaticFilesAsync()
     {
         staticFiles.Clear();
         try
@@ -115,13 +121,13 @@ else
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Failed to load static files: {ex.Message}");
+            Logger?.LogError(ex, "Failed to load static files");
         }
+        await Task.CompletedTask;
     }
 
-    async Task ImportStaticFile((string Url, string DisplayName) f)
+    private async Task ImportStaticFile((string Url, string DisplayName) f)
     {
-        // create DB record pointing to the static file
         var doc = new ProjectWebsite10032026.Models.Download { Description = f.DisplayName, FilePath = f.Url, FileName = f.DisplayName };
         try
         {
@@ -134,19 +140,13 @@ else
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Failed to import static file: {ex.Message}");
+            Logger?.LogError(ex, "Failed to import static file");
             messageType = "danger";
             message = "Failed to import file to database.";
         }
     }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Failed to load Downloads from database: {ex.Message}");
-            downloads = new List<ProjectWebsite10032026.Models.Download>();
-        }
-    }
 
-    async Task AddDoc()
+    private async Task AddDoc()
     {
         message = string.Empty;
         if (string.IsNullOrWhiteSpace(newDocDesc) || string.IsNullOrWhiteSpace(newDocPath))
@@ -164,7 +164,6 @@ else
         }
 
         var doc = new ProjectWebsite10032026.Models.Download { Description = newDocDesc, FilePath = newDocPath };
-        // auto-fill FileName when possible
         try
         {
             if (string.IsNullOrWhiteSpace(doc.FileName))
@@ -175,7 +174,6 @@ else
         }
         catch { }
 
-        // optimistic UI update
         downloads.Insert(0, doc);
         StateHasChanged();
         isSaving = true;
@@ -190,8 +188,7 @@ else
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Failed to add document: {ex.Message}");
-            // rollback optimistic update
+            Logger?.LogError(ex, "Failed to add document");
             downloads.Remove(doc);
             messageType = "danger";
             message = "Failed to add document. It was not saved to the database.";
@@ -202,21 +199,18 @@ else
         }
     }
 
-    bool IsValidPathOrUrl(string path)
+    private bool IsValidPathOrUrl(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) return false;
-        // absolute URI (http/https/file)
         if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
         {
             if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps || uri.IsFile)
                 return true;
         }
-        // Windows absolute path e.g. C:\folder\file
         try
         {
             if (System.IO.Path.IsPathRooted(path))
             {
-                // rudimentary invalid char check
                 var invalid = System.IO.Path.GetInvalidPathChars();
                 return path.IndexOfAny(invalid) == -1;
             }

@@ -50,20 +50,21 @@ else
 </div>
 
 @code {
-    List<ProjectWebsite10032026.Models.Link> links = new();
-    string newLinkDesc = string.Empty;
-    string newLinkUrl = string.Empty;
-    bool isSaving = false;
-    string message = string.Empty;
-    string messageType = "info"; // "info" or "danger"
+    private List<ProjectWebsite10032026.Models.Link> links = new();
+    private string newLinkDesc = string.Empty;
+    private string newLinkUrl = string.Empty;
+    private bool isSaving = false;
+    private string message = string.Empty;
+    private string messageType = "info"; // "info" or "danger"
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadLinks();
+        // Ensure seed data exists first so LoadLinks will include seeded items.
         await EnsureSeedLinksAsync();
+        await LoadLinks();
     }
 
-    async Task LoadLinks()
+    private async Task LoadLinks()
     {
         try
         {
@@ -72,9 +73,16 @@ else
                 .OrderBy(l => l.Description ?? string.Empty)
                 .ToListAsync();
         }
+        catch (Exception ex)
+        {
+            // Log and recover with an empty list
+            Logger?.LogError(ex, "Failed to load Links from database");
+            links = new List<ProjectWebsite10032026.Models.Link>();
+        }
+    }
 
     // Ensure the two requested links exist in the database; insert if missing.
-    async Task EnsureSeedLinksAsync()
+    private async Task EnsureSeedLinksAsync()
     {
         var seed = new[] {
             new ProjectWebsite10032026.Models.Link { Description = "Bliv godkendt som lærested", Url = "https://iu.dk/skoler-og-virksomheder/oplaering/bliv-godkendt-som-laerested" },
@@ -97,22 +105,15 @@ else
             if (changed)
             {
                 await db.SaveChangesAsync();
-                await LoadLinks();
             }
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Failed to seed default links: {ex.Message}");
-        }
-    }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Failed to load Links from database: {ex.Message}");
-            links = new List<ProjectWebsite10032026.Models.Link>();
+            Logger?.LogError(ex, "Failed to seed default links");
         }
     }
 
-    async Task AddLink()
+    private async Task AddLink()
     {
         message = string.Empty;
         if (string.IsNullOrWhiteSpace(newLinkDesc) || string.IsNullOrWhiteSpace(newLinkUrl))
@@ -140,13 +141,14 @@ else
             using var db = DbFactory.CreateDbContext();
             db.Links.Add(link);
             await db.SaveChangesAsync();
-            newLinkDesc = string.Empty; newLinkUrl = string.Empty;
+            newLinkDesc = string.Empty;
+            newLinkUrl = string.Empty;
             messageType = "info";
             message = "Link added.";
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Failed to add link: {ex.Message}");
+            Logger?.LogError(ex, "Failed to add link");
             // rollback optimistic update
             links.Remove(link);
             messageType = "danger";
