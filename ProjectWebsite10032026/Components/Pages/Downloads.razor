@@ -5,6 +5,28 @@
 
 <h3>Downloads</h3>
 
+<div class="mb-4 add-form">
+    <label for="newDoc" class="form-label">Add new document</label>
+    <div class="input-group">
+        <input id="newDoc" class="form-control" placeholder="Description" @bind="newDocDesc" />
+        <input class="form-control" placeholder="File path or URL" @bind="newDocPath" />
+        <button type="button" class="btn btn-primary" @onclick="AddDoc" disabled="@isSaving">
+            @if (isSaving)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span>Add</span>
+            }
+        </button>
+    </div>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="mt-2 alert alert-info p-2">@message</div>
+    }
+</div>
+
 <p>Available downloads:</p>
 
 @if (downloads == null || downloads.Count == 0)
@@ -27,8 +49,17 @@ else
 
 @code {
     List<ProjectWebsite10032026.Models.Download> downloads = new();
+    string newDocDesc = string.Empty;
+    string newDocPath = string.Empty;
+    bool isSaving = false;
+    string message = string.Empty;
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadDownloads();
+    }
+
+    async Task LoadDownloads()
     {
         try
         {
@@ -41,6 +72,37 @@ else
         {
             Console.Error.WriteLine($"Failed to load Downloads from database: {ex.Message}");
             downloads = new List<ProjectWebsite10032026.Models.Download>();
+        }
+    }
+
+    async Task AddDoc()
+    {
+        message = string.Empty;
+        if (string.IsNullOrWhiteSpace(newDocDesc) || string.IsNullOrWhiteSpace(newDocPath))
+        {
+            message = "Please fill both fields.";
+            return;
+        }
+
+        var doc = new ProjectWebsite10032026.Models.Download { Description = newDocDesc, FilePath = newDocPath };
+        isSaving = true;
+        try
+        {
+            using var db = DbFactory.CreateDbContext();
+            db.Downloads.Add(doc);
+            await db.SaveChangesAsync();
+            downloads.Insert(0, doc);
+            newDocDesc = string.Empty; newDocPath = string.Empty;
+            message = "Document added.";
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to add document: {ex.Message}");
+            message = "Failed to add document. Check console for details.";
+        }
+        finally
+        {
+            isSaving = false;
         }
     }
 }

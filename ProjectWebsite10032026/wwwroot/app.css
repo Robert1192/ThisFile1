@@ -68,3 +68,14 @@ h1:focus {
 .sidebar-custom{background:#f8f9fa;padding:1rem;border-radius:6px}
 .nav-link{color:#333}
 .nav-link.active{font-weight:600;color:var(--link-accent)}
+
+/* add-form styles */
+.add-form .input-group .form-control{min-width:0}
+.add-form .btn{min-width:70px}
+.add-form .alert{margin-bottom:0}
+
+/* responsive tweaks */
+@media (max-width:576px){
+  .add-form .input-group{flex-direction:column}
+  .add-form .input-group .form-control{margin-bottom:.5rem}
+}

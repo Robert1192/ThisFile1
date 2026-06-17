@@ -7,6 +7,28 @@
 
 <h3>Links</h3>
 
+<div class="mb-4 add-form">
+    <label for="newLink" class="form-label">Add new link</label>
+    <div class="input-group">
+        <input id="newLink" class="form-control" placeholder="Description" @bind="newLinkDesc" />
+        <input class="form-control" placeholder="Url" @bind="newLinkUrl" />
+        <button type="button" class="btn btn-primary" @onclick="AddLink" disabled="@isSaving">
+            @if (isSaving)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span>Add</span>
+            }
+        </button>
+    </div>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="mt-2 alert alert-info p-2">@message</div>
+    }
+</div>
+
 <p>List of useful links:</p>
 
 @if (links == null || links.Count == 0)
@@ -28,9 +50,18 @@ else
 </div>
 
 @code {
-    List<Link> links = new();
+    List<ProjectWebsite10032026.Models.Link> links = new();
+    string newLinkDesc = string.Empty;
+    string newLinkUrl = string.Empty;
+    bool isSaving = false;
+    string message = string.Empty;
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadLinks();
+    }
+
+    async Task LoadLinks()
     {
         try
         {
@@ -42,7 +73,42 @@ else
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Failed to load Links from database: {ex.Message}");
-            links = new List<Link>();
+            links = new List<ProjectWebsite10032026.Models.Link>();
+        }
+    }
+
+    async Task AddLink()
+    {
+        message = string.Empty;
+        if (string.IsNullOrWhiteSpace(newLinkDesc) || string.IsNullOrWhiteSpace(newLinkUrl))
+        {
+            message = "Please fill both fields.";
+            return;
+        }
+
+        var link = new ProjectWebsite10032026.Models.Link { Description = newLinkDesc, Url = newLinkUrl };
+        // optimistic UI update
+        links.Insert(0, link);
+        StateHasChanged();
+        isSaving = true;
+        try
+        {
+            using var db = DbFactory.CreateDbContext();
+            db.Links.Add(link);
+            await db.SaveChangesAsync();
+            newLinkDesc = string.Empty; newLinkUrl = string.Empty;
+            message = "Link added.";
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to add link: {ex.Message}");
+            // rollback optimistic update
+            links.Remove(link);
+            message = "Failed to add link. It was not saved to the database.";
+        }
+        finally
+        {
+            isSaving = false;
         }
     }
 }

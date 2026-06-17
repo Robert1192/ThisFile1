@@ -256,4 +256,6 @@ C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite1003
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ref\ProjectWebsite10032026.dll
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\u6hqnmiw9u-{0}-b9228eflpl-b9228eflpl.gz
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\cg87wd5oxm-{0}-2tj1sjhksk-2tj1sjhksk.gz
-C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\rlo0dzg74n-{0}-sygd2w8e55-sygd2w8e55.gz
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ProjectWebsite10032026.RazorAssemblyInfo.cache
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\ProjectWebsite10032026.RazorAssemblyInfo.cs
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net10.0\compressed\rlo0dzg74n-{0}-8a7in1ggpg-8a7in1ggpg.gz
