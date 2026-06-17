@@ -3,8 +3,9 @@
     "",
     "\\ProjectWebsite10032026",
     "\\ProjectWebsite10032026\\Components",
-    "\\ProjectWebsite10032026\\Components\\Pages"
+    "\\ProjectWebsite10032026\\Components\\Pages",
+    "\\ProjectWebsite10032026\\wwwroot"
   ],
-  "SelectedNode": "\\ProjectWebsite10032026\\Components\\Pages\\Weather.razor",
+  "SelectedNode": "\\ProjectWebsite10032026\\wwwroot\\app.css",
   "PreviewInSolutionExplorer": false
 }
