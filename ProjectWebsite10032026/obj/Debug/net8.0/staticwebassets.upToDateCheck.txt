@@ -1,7 +1,6 @@
 wwwroot\app.css
 wwwroot\favicon.png
-wwwroot\files\Praktikmål - Datatekniker Cybersikkerhed.pdf
-wwwroot\files\Praktikmål - Datatekniker Programmering.pdf
+wwwroot\files\merged_622717dc51c241b9b226d69a30cad4d9.pdf
 wwwroot\files\Praktikmål - IT-Supporter.pdf
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -46,5 +45,6 @@ wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
 wwwroot\lib\bootstrap\dist\js\bootstrap.js
 wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
 wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+wwwroot\files\merged_33a6d4a6f11f482bbe02dd59fb8f349a.pdf
 wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
 Components\Layout\ReconnectModal.razor.js

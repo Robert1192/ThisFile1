@@ -1,6 +1,5 @@
 @page "/downloads"
 
-
 @using ProjectWebsite10032026.Models
 @using ProjectWebsite10032026.Data
 @using Microsoft.EntityFrameworkCore
@@ -39,11 +38,17 @@
                     <strong>@f.FileName</strong>
                 </div>
 
-                <a class="btn btn-sm btn-outline-secondary"
-                   href="@f.Url"
-                   download="@f.FileName">
-                    Download
-                </a>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-outline-secondary"
+                       href="@f.Url"
+                       download="@f.FileName">
+                        Download
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger"
+                            @onclick="() => DeleteFile(f.FileName)">
+                        Delete
+                    </button>
+                </div>
             </div>
         }
     </div>
@@ -70,11 +75,17 @@ else
                     <div class="text-muted small">@d.FileName</div>
                 </div>
 
-                <a class="btn btn-sm btn-outline-primary"
-                   href="@d.FilePath"
-                   download="@d.FileName">
-                    Download
-                </a>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-outline-primary"
+                       href="@d.FilePath"
+                       download="@d.FileName">
+                        Download
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger"
+                            @onclick="() => DeleteFile(d.FileName)">
+                        Delete
+                    </button>
+                </div>
             </div>
         }
     </div>
@@ -198,6 +209,44 @@ else
     }
 
     // =========================
+    // DELETE A FILE (disk + DB)
+    // =========================
+    private async Task DeleteFile(string fileName)
+    {
+        try
+        {
+            var folder = Path.Combine(Env.WebRootPath!, "files");
+            var fullPath = Path.Combine(folder, fileName);
+
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+
+            using var db = DbFactory.CreateDbContext();
+
+            var entity = await db.Downloads.FirstOrDefaultAsync(x => x.FileName == fileName);
+            if (entity != null)
+            {
+                db.Downloads.Remove(entity);
+                await db.SaveChangesAsync();
+            }
+
+            await LoadDownloads();
+            LoadStaticFiles();
+
+            messageType = "success";
+            message = $"Deleted {fileName}.";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Delete failed");
+            messageType = "danger";
+            message = "Failed to delete file.";
+        }
+    }
+
+    // =========================
     // PDF MERGE UPLOAD
     // =========================
     private async Task HandlePdfUpload(InputFileChangeEventArgs e)
@@ -224,8 +273,6 @@ else
                 await stream.CopyToAsync(ms);
                 ms.Position = 0;
 
-                // Keep this alive until after outputDoc.Save() — PdfSharpCore
-                // reads page content lazily and needs the source stream open.
                 streams.Add(ms);
 
                 var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
@@ -236,7 +283,26 @@ else
                 }
             }
 
-            var fileName = $"merged_{Guid.NewGuid():N}.pdf";
+            // Build a display name and a safe-on-disk file name from the
+            // original uploaded file name(s) instead of a generic "Merged" label.
+            var originalNames = files.Select(f => f.Name).ToList();
+
+            var description = originalNames.Count == 1
+                ? originalNames[0]
+                : string.Join(", ", originalNames);
+
+            var baseName = Path.GetFileNameWithoutExtension(originalNames[0]);
+            foreach (var invalidChar in Path.GetInvalidFileNameChars())
+            {
+                baseName = baseName.Replace(invalidChar, '_');
+            }
+
+            var uniqueSuffix = Guid.NewGuid().ToString("N")[..8];
+
+            var fileName = originalNames.Count == 1
+                ? $"{baseName}_{uniqueSuffix}.pdf"
+                : $"{baseName}_merged_{uniqueSuffix}.pdf";
+
             var fullPath = Path.Combine(uploadDir, fileName);
 
             outputDoc.Save(fullPath);
@@ -245,7 +311,7 @@ else
 
             var doc = new Download
             {
-                Description = "Merged PDF upload",
+                Description = description,
                 FileName = fileName,
                 FilePath = $"/files/{fileName}",
                 CreatedAt = DateTime.UtcNow
@@ -255,9 +321,6 @@ else
             await db.SaveChangesAsync();
 
             downloads.Insert(0, doc);
-
-            // Refresh the synced static-files panel so the newly merged
-            // PDF actually shows up there instead of silently doing nothing.
             LoadStaticFiles();
 
             messageType = "success";
@@ -274,5 +337,39 @@ else
             foreach (var s in streams)
                 s.Dispose();
         }
+    }
+
+    private Task RunPdfMergeOnLargeStackThread(List<MemoryStream> streams, string outputPath)
+    {
+        var tcs = new TaskCompletionSource();
+
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                using var outputDoc = new PdfDocument();
+
+                foreach (var ms in streams)
+                {
+                    ms.Position = 0;
+                    var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
+
+                    foreach (var page in inputDoc.Pages)
+                    {
+                        outputDoc.AddPage(page);
+                    }
+                }
+
+                outputDoc.Save(outputPath);
+                tcs.SetResult();
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }, maxStackSize: 64 * 1024 * 1024); // 64 MB, well above the 1MB default
+
+        thread.Start();
+        return tcs.Task;
     }
 }
