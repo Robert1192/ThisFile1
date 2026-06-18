@@ -149,3 +149,13 @@ C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite1003
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectWebsite10032026.dll
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\refint\ProjectWebsite10032026.dll
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectWebsite10032026.pdb
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\appsettings.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\ProjectWebsite10032026.staticwebassets.runtime.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\ProjectWebsite10032026.staticwebassets.endpoints.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\ProjectWebsite10032026.deps.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\ProjectWebsite10032026.runtimeconfig.json
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\bin\Debug\net8.0\ProjectWebsite10032026.pdb
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectW.273D4E27.Up2Date
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectWebsite10032026.genruntimeconfig.cache
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ref\ProjectWebsite10032026.dll
