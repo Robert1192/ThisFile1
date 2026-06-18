@@ -11,7 +11,7 @@ using ProjectWebsite10032026.Data;
 namespace ProjectWebsite10032026.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260617132712_InitialCreate")]
+    [Migration("20260618074508_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

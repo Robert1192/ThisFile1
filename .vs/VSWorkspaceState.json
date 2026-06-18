@@ -3,9 +3,10 @@
     "",
     "\\ProjectWebsite10032026",
     "\\ProjectWebsite10032026\\Components",
+    "\\ProjectWebsite10032026\\Components\\Layout",
     "\\ProjectWebsite10032026\\Components\\Pages",
     "\\ProjectWebsite10032026\\wwwroot"
   ],
-  "SelectedNode": "\\ProjectWebsite10032026\\Program.cs",
+  "SelectedNode": "\\ProjectWebsite10032026\\Components\\Layout\\ReconnectModal.razor",
   "PreviewInSolutionExplorer": false
 }

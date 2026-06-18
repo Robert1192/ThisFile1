@@ -1,31 +1,33 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebsite10032026.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Blazor
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+// Connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// ✅ FIXED: Added EnableRetryOnFailure for transient SQL errors
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Missing DefaultConnection in appsettings.json");
+}
+
+// EF Core DbContextFactory
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
-    options.UseSqlServer(
-        connectionString,
-        sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-                5,
-                TimeSpan.FromSeconds(10),
-                null);
-        }));
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+    }));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
