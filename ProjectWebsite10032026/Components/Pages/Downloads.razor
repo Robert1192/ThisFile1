@@ -4,8 +4,8 @@
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Logging
 @inject IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
-@inject IWebHostEnvironment Env
-@inject ILogger<Downloads>? Logger
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@inject ILogger<Downloads> Logger
 
 <!-- Downloads page -->
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">

@@ -195,7 +195,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "ViewState": "AgIAADYAAAAAAAAAAADgv0MAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-06-12T09:12:34.084Z",
               "EditorCaption": ""
@@ -363,9 +363,10 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
-              "ViewState": "AgIAAAMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-02T09:02:01.534Z"
+              "WhenOpened": "2026-06-02T09:02:01.534Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
