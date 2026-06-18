@@ -147,8 +147,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\README.Identity.md",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2026-06-18T12:02:33.76Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:02:33.76Z"
             },
             {
               "$type": "Document",
@@ -160,8 +159,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Pages\\Login.razor",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAABAAAABpAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-18T12:02:16.372Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:02:16.372Z"
             },
             {
               "$type": "Document",
@@ -173,8 +171,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\_Imports.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-02T08:07:27.209Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T08:07:27.209Z"
             },
             {
               "$type": "Document",
@@ -186,8 +183,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Data\\IdentitySeed.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwA4AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-18T12:01:07.286Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:01:07.286Z"
             },
             {
               "$type": "Document",
@@ -199,8 +195,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Routes.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-02T08:07:32.844Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T08:07:32.844Z"
             },
             {
               "$type": "Document",
@@ -212,8 +207,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Pages\\Logout.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-18T12:02:22.808Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:02:22.808Z"
             },
             {
               "$type": "Document",
@@ -223,7 +217,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Program.cs",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
               "RelativeToolTip": "ProjectWebsite10032026\\Program.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAqwEcAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAAAGsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-02T09:02:08.694Z",
               "EditorCaption": ""
@@ -238,8 +232,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Migrations\\20260618075942_InitialCreate.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-18T12:15:32.007Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:15:32.007Z"
             },
             {
               "$type": "Document",
@@ -251,8 +244,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Models\\AppDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-02T08:07:37.239Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T08:07:37.239Z"
             },
             {
               "$type": "Document",
@@ -264,8 +256,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Migrations\\20260618121429_AddIdentityTables.cs",
               "ViewState": "AgIAAM8AAAAAAAAAAAAYwOQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-18T12:18:00.757Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-18T12:18:00.757Z"
             },
             {
               "$type": "Document",
@@ -277,8 +268,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
               "ViewState": "AgIAABIAAAAAAAAAAAAewKoBAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-12T09:12:34.084Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T09:12:34.084Z"
             },
             {
               "$type": "Document",
@@ -302,8 +292,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Pages\\_Host.cshtml",
               "ViewState": "AgIAAAUAAAAAAAAAAAAwwBYAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-12T09:23:18.702Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T09:23:18.702Z"
             },
             {
               "$type": "Document",
@@ -315,8 +304,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\App.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-02T08:07:28.752Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T08:07:28.752Z"
             },
             {
               "$type": "Document",
@@ -328,8 +316,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
               "ViewState": "AgIAACYAAAAAAAAAAABBwAwAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-04T11:07:53.982Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-04T11:07:53.982Z"
             },
             {
               "$type": "Document",
@@ -341,8 +328,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAABBwBQAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-04-24T08:24:43.081Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T08:24:43.081Z"
             },
             {
               "$type": "Document",
@@ -378,8 +364,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Layout\\NavMenu.razor",
               "ViewState": "AgIAAAQAAAAAAAAAAABBwC8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-10T10:56:13.236Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-10T10:56:13.236Z"
             },
             {
               "$type": "Document",
