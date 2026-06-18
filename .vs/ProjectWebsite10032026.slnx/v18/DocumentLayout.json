@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\links.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\downloads.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\downloads.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -33,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\projectwebsite10032026.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\projectwebsite10032026.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\downloads.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|solutionrelative:projectwebsite10032026\\components\\pages\\downloads.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{02664132-ED1F-1043-5C56-18E810C5C3DB}|ProjectWebsite10032026\\ProjectWebsite10032026.csproj|c:\\users\\robert\\source\\repos\\projectwebsite10032026\\thisfile1\\projectwebsite10032026\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -107,7 +107,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -115,19 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
-              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Program.cs",
-              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
-              "RelativeToolTip": "ProjectWebsite10032026\\Program.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAuwCYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-02T09:02:08.694Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\appsettings.json",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\appsettings.json",
@@ -140,7 +128,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "ProjectWebsite10032026.csproj",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\ProjectWebsite10032026.csproj",
@@ -152,7 +140,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "App.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\App.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\App.razor",
@@ -176,7 +164,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Routes.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Routes.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Routes.razor",
@@ -194,14 +182,27 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Links.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAqwIUAAABHAAAAAAAAAA==",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAkwJ0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-06-04T11:07:53.982Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "Downloads.razor",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
+              "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAuwKIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-12T09:12:34.084Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Models\\AppDbContext.cs",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Models\\AppDbContext.cs",
@@ -213,7 +214,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "ReconnectModal.razor",
               "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Layout\\ReconnectModal.razor",
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Layout\\ReconnectModal.razor",
@@ -225,15 +226,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Downloads.razor",
-              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "ViewState": "AgIAANwAAAAAAAAAAAAuwOoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-12T09:12:34.084Z"
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
+              "RelativeDocumentMoniker": "ProjectWebsite10032026\\Program.cs",
+              "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
+              "RelativeToolTip": "ProjectWebsite10032026\\Program.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAuwCYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T09:02:08.694Z"
             },
             {
               "$type": "Document",
