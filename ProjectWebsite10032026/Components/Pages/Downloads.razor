@@ -6,14 +6,38 @@
 @using Microsoft.Extensions.Logging
 @using PdfSharpCore.Pdf
 @using PdfSharpCore.Pdf.IO
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject IDbContextFactory<AppDbContext> DbFactory
 @inject IWebHostEnvironment Env
 @inject ILogger<Downloads> Logger
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
 
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <h3 class="m-0">Downloads</h3>
     <NavLink class="btn btn-outline-primary" href="/">Links</NavLink>
+</div>
+
+<!-- small status box -->
+<div class="d-flex justify-content-end mb-3">
+    <div class="card p-2" style="width:220px;">
+        <AuthorizeView>
+            <Authorized Context="authState">
+                <div class="small">Signed in as</div>
+                <div class="fw-bold">@authState.User.Identity?.Name</div>
+                <div class="mt-2 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo("/logout")'>Logout</button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="small text-muted">Not signed in</div>
+                <div class="mt-2 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
 </div>
 
 @if (!string.IsNullOrWhiteSpace(message))
@@ -21,8 +45,18 @@
     <div class="alert alert-@messageType">@message</div>
 }
 
-<h5>Upload PDF (merge pages)</h5>
-<InputFile OnChange="HandlePdfUpload" multiple />
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <h5>Upload PDF (merge pages)</h5>
+        <InputFile OnChange="HandlePdfUpload" multiple />
+    </Authorized>
+    <NotAuthorized>
+        <div class="d-flex gap-2 align-items-center">
+            <h6 class="text-muted m-0">Log in as admin to upload files.</h6>
+            <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Log in</button>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 <hr />
 
@@ -44,10 +78,15 @@
                        download="@f.FileName">
                         Download
                     </a>
-                    <button class="btn btn-sm btn-outline-danger"
-                            @onclick="() => DeleteFile(f.FileName)">
-                        Delete
-                    </button>
+
+                    <AuthorizeView Roles="Admin">
+                        <Authorized>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    @onclick="() => DeleteFile(f.FileName)">
+                                Delete
+                            </button>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
         }
@@ -81,10 +120,15 @@ else
                        download="@d.FileName">
                         Download
                     </a>
-                    <button class="btn btn-sm btn-outline-danger"
-                            @onclick="() => DeleteFile(d.FileName)">
-                        Delete
-                    </button>
+
+                    <AuthorizeView Roles="Admin">
+                        <Authorized>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    @onclick="() => DeleteFile(d.FileName)">
+                                Delete
+                            </button>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
         }
@@ -215,6 +259,14 @@ else
     {
         try
         {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            if (!user.IsInRole("Admin"))
+            {
+                messageType = "danger";
+                message = "Unauthorized";
+                return;
+            }
             var folder = Path.Combine(Env.WebRootPath!, "files");
             var fullPath = Path.Combine(folder, fileName);
 
@@ -251,6 +303,15 @@ else
     // =========================
     private async Task HandlePdfUpload(InputFileChangeEventArgs e)
     {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (!user.IsInRole("Admin"))
+        {
+            messageType = "danger";
+            message = "Unauthorized";
+            return;
+        }
+
         var streams = new List<MemoryStream>();
 
         try

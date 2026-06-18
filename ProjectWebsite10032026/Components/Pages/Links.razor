@@ -1,7 +1,10 @@
 ﻿@using ProjectWebsite10032026.Data
 @using ProjectWebsite10032026.Models
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<AppDbContext> DbFactory
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
 
 @page "/"
 
@@ -14,26 +17,57 @@
     </NavLink>
 </div>
 
+<!-- small status box -->
+<div class="d-flex justify-content-end mb-3">
+    <div class="card p-2" style="width:220px;">
+        <AuthorizeView>
+            <Authorized Context="authState">
+                <div class="small">Signed in as</div>
+                <div class="fw-bold">@authState.User.Identity?.Name</div>
+                <div class="mt-2 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo("/logout")'>Logout</button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="small text-muted">Not signed in</div>
+                <div class="mt-2 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
+
 <!-- 🔵 ADD LINK FORM -->
 <div class="card p-3 mb-3">
-    <h5>Add new link</h5>
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <h5>Add new link</h5>
 
-    <input class="form-control mb-2"
-           placeholder="Category"
-           @bind="newCategory" />
+            <input class="form-control mb-2"
+                   placeholder="Category"
+                   @bind="newCategory" />
 
-    <input class="form-control mb-2"
-           placeholder="Description"
-           @bind="newDescription" />
+            <input class="form-control mb-2"
+                   placeholder="Description"
+                   @bind="newDescription" />
 
-    <input class="form-control mb-2"
-           placeholder="URL"
-           @bind="newUrl" />
+            <input class="form-control mb-2"
+                   placeholder="URL"
+                   @bind="newUrl" />
 
-    <button class="btn btn-primary"
-            @onclick="AddLinkAsync">
-        Add Link
-    </button>
+            <button class="btn btn-primary"
+                    @onclick="AddLinkAsync">
+                Add Link
+            </button>
+        </Authorized>
+        <NotAuthorized>
+            <div class="d-flex gap-2 align-items-center">
+                <h6 class="text-muted m-0">Log in as admin to add links.</h6>
+                <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Log in</button>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
 
 <!-- 🔵 LIST -->
@@ -104,6 +138,14 @@ else
     {
         if (string.IsNullOrWhiteSpace(newUrl))
             return;
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (!user.IsInRole("Admin"))
+        {
+            // Optionally show UI feedback; keep silent to avoid changes
+            return;
+        }
 
         try
         {

@@ -1,0 +1,60 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Components.Authorization
+@using ProjectWebsite10032026.Data
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthProvider
+
+<h3>Login</h3>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger">@error</div>
+}
+
+<EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+    <InputText @bind-Value="loginModel.Email" placeholder="Email" class="form-control mb-2" />
+    <InputText @bind-Value="loginModel.Password" placeholder="Password" type="password" class="form-control mb-2" />
+    <button type="submit" class="btn btn-primary">Log in</button>
+</EditForm>
+
+@code {
+    private string? error;
+
+    private LoginModel loginModel = new();
+
+    public class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            var result = await SignInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, isPersistent: false, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                // Notify the authentication state provider
+                if (AuthProvider is IdentityAuthenticationStateProvider authProvider)
+                {
+                    authProvider.NotifyUserAuthentication(loginModel.Email);
+                }
+                
+                Navigation.NavigateTo("/", true);
+            }
+            else
+            {
+                error = "Invalid login attempt.";
+            }
+        }
+        catch (Exception ex)
+        {
+            error = $"Login error: {ex.Message}";
+        }
+    }
+}

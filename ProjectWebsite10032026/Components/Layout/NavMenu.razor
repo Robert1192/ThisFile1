@@ -1,10 +1,24 @@
 ﻿@using ProjectWebsite10032026.Models
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Authorization
 @inject Microsoft.EntityFrameworkCore.IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
+@inject NavigationManager Navigation
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Mercantec</a>
+
+        <div class="d-flex ms-auto">
+            <AuthorizeView>
+                <Authorized Context="authState">
+                    <div class="me-2 text-white">@authState.User.Identity?.Name</div>
+                    <button class="btn btn-sm btn-outline-light" @onclick='() => Navigation.NavigateTo("/logout")'>Logout</button>
+                </Authorized>
+                <NotAuthorized>
+                    <button class="btn btn-sm btn-outline-light" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
     </div>
 </div>
 
