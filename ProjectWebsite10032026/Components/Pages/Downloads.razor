@@ -1,5 +1,6 @@
 @page "/downloads"
 
+
 @using ProjectWebsite10032026.Models
 @using ProjectWebsite10032026.Data
 @using Microsoft.EntityFrameworkCore
@@ -201,6 +202,8 @@ else
     // =========================
     private async Task HandlePdfUpload(InputFileChangeEventArgs e)
     {
+        var streams = new List<MemoryStream>();
+
         try
         {
             var files = e.GetMultipleFiles();
@@ -216,10 +219,14 @@ else
             foreach (var file in files)
             {
                 await using var stream = file.OpenReadStream(50_000_000);
-                using var ms = new MemoryStream();
+                var ms = new MemoryStream();
 
                 await stream.CopyToAsync(ms);
                 ms.Position = 0;
+
+                // Keep this alive until after outputDoc.Save() — PdfSharpCore
+                // reads page content lazily and needs the source stream open.
+                streams.Add(ms);
 
                 var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
 
@@ -261,6 +268,11 @@ else
             Logger.LogError(ex, "PDF upload failed");
             messageType = "danger";
             message = "Failed to process PDF.";
+        }
+        finally
+        {
+            foreach (var s in streams)
+                s.Dispose();
         }
     }
 }
