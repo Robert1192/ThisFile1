@@ -10,7 +10,7 @@ using ProjectWebsite10032026.Data;
 namespace ProjectWebsite10032026.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ProjectWebsite10032026ModelSnapshot : ModelSnapshot
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

@@ -146,3 +146,4 @@ C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite1003
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectWebsite10032026.pdb
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ProjectWebsite10032026.genruntimeconfig.cache
 C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\ref\ProjectWebsite10032026.dll
+C:\Users\Robert\source\repos\ProjectWebsite10032026\ThisFile1\ProjectWebsite10032026\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
