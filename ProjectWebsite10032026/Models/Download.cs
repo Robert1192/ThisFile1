@@ -8,5 +8,8 @@
         // Path or URL to the file
         public string? FilePath { get; set; }
         public string? Description { get; set; }
+
+        // Timestamp when the download record was created
+        public DateTime CreatedAt { get; set; }
     }
 }

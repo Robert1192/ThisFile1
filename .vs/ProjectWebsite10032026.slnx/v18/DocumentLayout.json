@@ -123,8 +123,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-06-02T09:02:07.254Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T09:02:07.254Z"
             },
             {
               "$type": "Document",
@@ -184,8 +183,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Links.razor",
               "ViewState": "AgIAAE8AAAAAAAAAAAAuwAkAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-04T11:07:53.982Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-04T11:07:53.982Z"
             },
             {
               "$type": "Document",
@@ -195,7 +193,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Pages\\Downloads.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAPIAAAAAAAAAAADwvwIBAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-06-12T09:12:34.084Z",
               "EditorCaption": ""
@@ -256,7 +254,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Components\\Layout\\NavMenu.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Components\\Layout\\NavMenu.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Layout\\NavMenu.razor",
-              "ViewState": "AgIAABEAAAAAAAAAAIBJwCQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAABRwCEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-06-10T10:56:13.236Z",
               "EditorCaption": ""
@@ -281,9 +279,10 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Models\\Download.cs",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Models\\Download.cs",
               "RelativeToolTip": "ProjectWebsite10032026\\Models\\Download.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAIBQwA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-02T09:01:52.963Z"
+              "WhenOpened": "2026-06-02T09:01:52.963Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -365,8 +364,7 @@
               "RelativeToolTip": "ProjectWebsite10032026\\Components\\Layout\\MainLayout.razor",
               "ViewState": "AgIAABMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-02T09:02:01.534Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T09:02:01.534Z"
             },
             {
               "$type": "Document",

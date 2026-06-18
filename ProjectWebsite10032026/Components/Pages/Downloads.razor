@@ -1,16 +1,52 @@
 @page "/downloads"
+
 @using ProjectWebsite10032026.Models
 @using ProjectWebsite10032026.Data
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Logging
-@inject IDbContextFactory<ProjectWebsite10032026.Data.AppDbContext> DbFactory
-@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@using PdfSharpCore.Pdf
+@using PdfSharpCore.Pdf.IO
+
+@inject IDbContextFactory<AppDbContext> DbFactory
+@inject IWebHostEnvironment Env
 @inject ILogger<Downloads> Logger
 
-<!-- Downloads page -->
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <h3 class="m-0">Downloads</h3>
+    <NavLink class="btn btn-outline-primary" href="/">Links</NavLink>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-@messageType">@message</div>
+}
+
+<h5>Upload PDF (merge pages)</h5>
+<InputFile OnChange="HandlePdfUpload" multiple />
+
+<hr />
+
+@if (staticFiles.Count > 0)
+{
+    <h5>Files in /wwwroot/files (Synced)</h5>
+
+    <div class="list-group mb-3">
+        @foreach (var f in staticFiles)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@f.FileName</strong>
+                </div>
+
+                <a class="btn btn-sm btn-outline-secondary"
+                   href="@f.Url"
+                   download="@f.FileName">
+                    Download
+                </a>
+            </div>
+        }
+    </div>
+}
 
 @if (downloads == null)
 {
@@ -22,16 +58,20 @@ else if (downloads.Count == 0)
 }
 else
 {
-    <div class="list-group">
+    <div class="list-group mt-3">
         @foreach (var d in downloads)
         {
-            <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="list-group-item d-flex justify-content-between align-items-center"
+                 @key="d.ID">
+
                 <div>
-                    <strong>@(string.IsNullOrWhiteSpace(d.Description) ? d.FileName : d.Description)</strong>
+                    <strong>@d.Description</strong>
                     <div class="text-muted small">@d.FileName</div>
                 </div>
 
-                <a class="btn btn-sm btn-outline-primary" href="@d.FilePath" target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-sm btn-outline-primary"
+                   href="@d.FilePath"
+                   download="@d.FileName">
                     Download
                 </a>
             </div>
@@ -40,22 +80,77 @@ else
 }
 
 @code {
-    private List<ProjectWebsite10032026.Models.Download> downloads = new();
-    private List<(string Url, string DisplayName)> staticFiles = new();
 
-    private string newDocDesc = string.Empty;
-    private string newDocPath = string.Empty;
+    private List<Download> downloads = new();
+    private List<StaticFileItem> staticFiles = new();
 
-    private bool isSaving = false;
-    private string message = string.Empty;
+    private string message = "";
     private string messageType = "info";
+
+    public class StaticFileItem
+    {
+        public string FileName { get; set; } = "";
+        public string Url { get; set; } = "";
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        await SyncFilesWithDatabase();
         await LoadDownloads();
-        await LoadStaticFilesAsync();
+        LoadStaticFiles();
     }
 
+    // =========================
+    // AUTO SYNC DB ↔ FILES
+    // =========================
+    private async Task SyncFilesWithDatabase()
+    {
+        try
+        {
+            var folder = Path.Combine(Env.WebRootPath!, "files");
+            Directory.CreateDirectory(folder);
+
+            var diskFiles = Directory.GetFiles(folder)
+                .Select(Path.GetFileName)
+                .ToList();
+
+            using var db = DbFactory.CreateDbContext();
+
+            var dbFiles = await db.Downloads
+                .Select(x => x.FileName)
+                .ToListAsync();
+
+            // 1. Add missing files to DB
+            foreach (var file in diskFiles)
+            {
+                if (file == null) continue;
+
+                if (!dbFiles.Contains(file))
+                {
+                    db.Downloads.Add(new Download
+                    {
+                        Description = file,
+                        FileName = file,
+                        FilePath = $"/files/{file}",
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+            }
+
+            await db.SaveChangesAsync();
+
+            messageType = "info";
+            message = "Files synced successfully.";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Sync failed");
+        }
+    }
+
+    // =========================
+    // LOAD DB
+    // =========================
     private async Task LoadDownloads()
     {
         try
@@ -64,63 +159,89 @@ else
 
             downloads = await db.Downloads
                 .AsNoTracking()
-                .OrderBy(d => EF.Property<string>(d, nameof(Download.Description)) ?? string.Empty)
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to load Downloads from database");
+            Logger.LogError(ex, "LoadDownloads failed");
             downloads = new();
         }
     }
 
-    private async Task LoadStaticFilesAsync()
+    // =========================
+    // LOAD TOP 3 FILES
+    // =========================
+    private void LoadStaticFiles()
+    {
+        staticFiles.Clear();
+
+        var path = Path.Combine(Env.WebRootPath!, "files");
+
+        if (!Directory.Exists(path))
+            return;
+
+        var files = Directory.GetFiles(path)
+            .Select(f => new FileInfo(f))
+            .OrderByDescending(f => f.CreationTime)
+            .Take(3);
+
+        foreach (var file in files)
+        {
+            staticFiles.Add(new StaticFileItem
+            {
+                FileName = file.Name,
+                Url = $"/files/{file.Name}"
+            });
+        }
+    }
+
+    // =========================
+    // PDF MERGE UPLOAD
+    // =========================
+    private async Task HandlePdfUpload(InputFileChangeEventArgs e)
     {
         try
         {
-            staticFiles.Clear();
+            var files = e.GetMultipleFiles();
 
-            var webRoot = Env.WebRootPath;
-            var filesDir = Path.Combine(webRoot ?? ".", "files");
+            if (files.Count == 0)
+                return;
 
-            if (Directory.Exists(filesDir))
+            var uploadDir = Path.Combine(Env.WebRootPath!, "files");
+            Directory.CreateDirectory(uploadDir);
+
+            using var outputDoc = new PdfDocument();
+
+            foreach (var file in files)
             {
-                var files = Directory.EnumerateFiles(filesDir)
-                    .Where(p => p.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase));
+                await using var stream = file.OpenReadStream(50_000_000);
+                using var ms = new MemoryStream();
 
-                foreach (var p in files)
+                await stream.CopyToAsync(ms);
+                ms.Position = 0;
+
+                var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
+
+                foreach (var page in inputDoc.Pages)
                 {
-                    var name = Path.GetFileName(p);
-
-                    staticFiles.Add((
-                        Url: $"/files/{Uri.EscapeDataString(name)}",
-                        DisplayName: name
-                    ));
+                    outputDoc.AddPage(page);
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Failed to load static files");
-        }
 
-        await Task.CompletedTask;
-    }
+            var fileName = $"merged_{Guid.NewGuid():N}.pdf";
+            var fullPath = Path.Combine(uploadDir, fileName);
 
-    private Task ImportStaticFileHandler((string Url, string DisplayName) f)
-        => ImportStaticFile(f);
+            outputDoc.Save(fullPath);
 
-    private async Task ImportStaticFile((string Url, string DisplayName) f)
-    {
-        try
-        {
             using var db = DbFactory.CreateDbContext();
 
-            var doc = new ProjectWebsite10032026.Models.Download
+            var doc = new Download
             {
-                Description = f.DisplayName,
-                FilePath = f.Url,
-                FileName = f.DisplayName
+                Description = "Merged PDF upload",
+                FileName = fileName,
+                FilePath = $"/files/{fileName}",
+                CreatedAt = DateTime.UtcNow
             };
 
             db.Downloads.Add(doc);
@@ -128,85 +249,18 @@ else
 
             downloads.Insert(0, doc);
 
-            messageType = "info";
-            message = "Imported file to Downloads.";
+            // Refresh the synced static-files panel so the newly merged
+            // PDF actually shows up there instead of silently doing nothing.
+            LoadStaticFiles();
+
+            messageType = "success";
+            message = "PDF uploaded and merged successfully!";
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Failed to import static file");
-
+            Logger.LogError(ex, "PDF upload failed");
             messageType = "danger";
-            message = "Failed to import file to database.";
+            message = "Failed to process PDF.";
         }
-    }
-
-    private async Task AddDoc()
-    {
-        message = string.Empty;
-
-        if (string.IsNullOrWhiteSpace(newDocDesc) ||
-            string.IsNullOrWhiteSpace(newDocPath))
-        {
-            messageType = "danger";
-            message = "Please fill both fields.";
-            return;
-        }
-
-        if (!IsValidPathOrUrl(newDocPath))
-        {
-            messageType = "danger";
-            message = "Invalid URL or file path.";
-            return;
-        }
-
-        isSaving = true;
-
-        try
-        {
-            var doc = new ProjectWebsite10032026.Models.Download
-            {
-                Description = newDocDesc,
-                FilePath = newDocPath,
-                FileName = Path.GetFileName(newDocPath)
-            };
-
-            using var db = DbFactory.CreateDbContext();
-
-            db.Downloads.Add(doc);
-            await db.SaveChangesAsync();
-
-            downloads.Insert(0, doc);
-
-            newDocDesc = string.Empty;
-            newDocPath = string.Empty;
-
-            messageType = "info";
-            message = "Document added.";
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Failed to add document");
-
-            messageType = "danger";
-            message = "Failed to add document.";
-        }
-        finally
-        {
-            isSaving = false;
-        }
-    }
-
-    private bool IsValidPathOrUrl(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path)) return false;
-
-        if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
-        {
-            return uri.Scheme == Uri.UriSchemeHttp ||
-                   uri.Scheme == Uri.UriSchemeHttps ||
-                   uri.IsFile;
-        }
-
-        return Path.IsPathRooted(path);
     }
 }
