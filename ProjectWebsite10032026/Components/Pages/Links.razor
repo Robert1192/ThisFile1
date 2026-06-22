@@ -11,30 +11,19 @@
 <!-- 🔵 HEADER -->
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <h3 class="m-0">Links</h3>
-
-    <NavLink class="btn btn-outline-primary" href="/downloads">
-        Downloads
-    </NavLink>
-</div>
-
-<!-- small status box -->
-<div class="d-flex justify-content-end mb-3">
-    <div class="card p-2" style="width:220px;">
+    <div class="d-flex align-items-center gap-3">
         <AuthorizeView>
             <Authorized Context="authState">
-                <div class="small">Signed in as</div>
-                <div class="fw-bold">@authState.User.Identity?.Name</div>
-                <div class="mt-2 d-flex justify-content-end">
-                    <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo("/logout")'>Logout</button>
-                </div>
+                <span class="small text-muted">@authState.User.Identity?.Name</span>
+                <form method="post" action="/Account/Logout" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Logout</button>
+                </form>
             </Authorized>
             <NotAuthorized>
-                <div class="small text-muted">Not signed in</div>
-                <div class="mt-2 d-flex justify-content-end">
-                    <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
-                </div>
+                <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
             </NotAuthorized>
         </AuthorizeView>
+        <NavLink class="btn btn-outline-primary" href="/downloads">Downloads</NavLink>
     </div>
 </div>
 
@@ -56,8 +45,7 @@
                    placeholder="URL"
                    @bind="newUrl" />
 
-            <button class="btn btn-primary"
-                    @onclick="AddLinkAsync">
+            <button class="btn btn-primary" @onclick="AddLinkAsync">
                 Add Link
             </button>
         </Authorized>
@@ -87,21 +75,24 @@ else
             <a class="list-group-item list-group-item-action"
                href="@link.Url"
                target="_blank"
-               rel="noopener noreferrer">
-
-                <strong>
-                    @(string.IsNullOrWhiteSpace(link.Category) ? "Link" : link.Category)
-                </strong>
-
-                <div>
-                    @(string.IsNullOrWhiteSpace(link.Description)
-                        ? link.Url
-                        : link.Description)
+               rel="noopener noreferrer"
+               style="border-left: 4px solid #0d6efd; color: #0d6efd; text-decoration: none;">
+                <div style="font-weight: 500;">
+                    @(string.IsNullOrWhiteSpace(link.Description) ? link.Url : link.Description)
+                </div>
+                <div style="font-size: 0.8rem; color: #6c757d;">
+                    @(string.IsNullOrWhiteSpace(link.Category) ? "" : link.Category)
                 </div>
             </a>
         }
     </div>
 }
+
+<!-- 🔵 FOOTER -->
+<div class="border-top mt-4 pt-3 text-muted small text-center">
+    Mercantec, H.C. Andersens Vej 9, 8800 Viborg &nbsp;|&nbsp; Tlf. +45 89 50 33 00 &nbsp;|&nbsp;
+    <a href="mailto:mikp@mercantec.dk">mikp@mercantec.dk</a>
+</div>
 
 @code {
     private List<Link> links = new();
@@ -121,7 +112,6 @@ else
         try
         {
             using var db = DbFactory.CreateDbContext();
-
             links = await db.Links
                 .AsNoTracking()
                 .OrderBy(l => EF.Property<string>(l, nameof(Link.Category)) ?? "")
@@ -142,22 +132,17 @@ else
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         if (!user.IsInRole("Admin"))
-        {
-            // Optionally show UI feedback; keep silent to avoid changes
             return;
-        }
 
         try
         {
             using var db = DbFactory.CreateDbContext();
-
             var link = new Link
             {
                 Category = newCategory,
                 Description = newDescription,
                 Url = newUrl
             };
-
             db.Links.Add(link);
             await db.SaveChangesAsync();
 
@@ -167,16 +152,12 @@ else
 
             await LoadLinks();
         }
-        catch
-        {
-            // optional: add logging here
-        }
+        catch { }
     }
 
     private async Task EnsureSeedLinksAsyncSafe()
     {
         using var db = DbFactory.CreateDbContext();
-
         if (await db.Links.AnyAsync())
             return;
 
@@ -194,7 +175,6 @@ else
                 Url = "https://www.retsinformation.dk/eli/lta/2026/182"
             }
         );
-
         await db.SaveChangesAsync();
     }
 }

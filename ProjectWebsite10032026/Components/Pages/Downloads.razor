@@ -14,29 +14,22 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
+<!-- 🔵 HEADER -->
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <h3 class="m-0">Downloads</h3>
-    <NavLink class="btn btn-outline-primary" href="/">Links</NavLink>
-</div>
-
-<!-- small status box -->
-<div class="d-flex justify-content-end mb-3">
-    <div class="card p-2" style="width:220px;">
+    <div class="d-flex align-items-center gap-3">
         <AuthorizeView>
             <Authorized Context="authState">
-                <div class="small">Signed in as</div>
-                <div class="fw-bold">@authState.User.Identity?.Name</div>
-                <div class="mt-2 d-flex justify-content-end">
-                    <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo("/logout")'>Logout</button>
-                </div>
+                <span class="small text-muted">@authState.User.Identity?.Name</span>
+                <form method="post" action="/Account/Logout" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Logout</button>
+                </form>
             </Authorized>
             <NotAuthorized>
-                <div class="small text-muted">Not signed in</div>
-                <div class="mt-2 d-flex justify-content-end">
-                    <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
-                </div>
+                <button class="btn btn-sm btn-outline-primary" @onclick='() => Navigation.NavigateTo("/login")'>Login</button>
             </NotAuthorized>
         </AuthorizeView>
+        <NavLink class="btn btn-outline-primary" href="/">Links</NavLink>
     </div>
 </div>
 
@@ -60,39 +53,6 @@
 
 <hr />
 
-@if (staticFiles.Count > 0)
-{
-    <h5>Files in /wwwroot/files (Synced)</h5>
-
-    <div class="list-group mb-3">
-        @foreach (var f in staticFiles)
-        {
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>@f.FileName</strong>
-                </div>
-
-                <div class="d-flex gap-2">
-                    <a class="btn btn-sm btn-outline-secondary"
-                       href="@f.Url"
-                       download="@f.FileName">
-                        Download
-                    </a>
-
-                    <AuthorizeView Roles="Admin">
-                        <Authorized>
-                            <button class="btn btn-sm btn-outline-danger"
-                                    @onclick="() => DeleteFile(f.FileName)">
-                                Delete
-                            </button>
-                        </Authorized>
-                    </AuthorizeView>
-                </div>
-            </div>
-        }
-    </div>
-}
-
 @if (downloads == null)
 {
     <p>Loading...</p>
@@ -108,19 +68,15 @@ else
         {
             <div class="list-group-item d-flex justify-content-between align-items-center"
                  @key="d.ID">
-
                 <div>
                     <strong>@d.Description</strong>
-                    <div class="text-muted small">@d.FileName</div>
                 </div>
-
                 <div class="d-flex gap-2">
                     <a class="btn btn-sm btn-outline-primary"
                        href="@d.FilePath"
                        download="@d.FileName">
                         Download
                     </a>
-
                     <AuthorizeView Roles="Admin">
                         <Authorized>
                             <button class="btn btn-sm btn-outline-danger"
@@ -135,30 +91,24 @@ else
     </div>
 }
 
-@code {
+<!-- 🔵 FOOTER -->
+<div class="border-top mt-4 pt-3 text-muted small text-center">
+    Mercantec, H.C. Andersens Vej 9, 8800 Viborg &nbsp;|&nbsp; Tlf. +45 89 50 33 00 &nbsp;|&nbsp;
+    <a href="mailto:mikp@mercantec.dk">mikp@mercantec.dk</a>
+</div>
 
+@code {
     private List<Download> downloads = new();
-    private List<StaticFileItem> staticFiles = new();
 
     private string message = "";
     private string messageType = "info";
-
-    public class StaticFileItem
-    {
-        public string FileName { get; set; } = "";
-        public string Url { get; set; } = "";
-    }
 
     protected override async Task OnInitializedAsync()
     {
         await SyncFilesWithDatabase();
         await LoadDownloads();
-        LoadStaticFiles();
     }
 
-    // =========================
-    // AUTO SYNC DB ↔ FILES
-    // =========================
     private async Task SyncFilesWithDatabase()
     {
         try
@@ -171,21 +121,16 @@ else
                 .ToList();
 
             using var db = DbFactory.CreateDbContext();
+            var dbFiles = await db.Downloads.Select(x => x.FileName).ToListAsync();
 
-            var dbFiles = await db.Downloads
-                .Select(x => x.FileName)
-                .ToListAsync();
-
-            // 1. Add missing files to DB
             foreach (var file in diskFiles)
             {
                 if (file == null) continue;
-
                 if (!dbFiles.Contains(file))
                 {
                     db.Downloads.Add(new Download
                     {
-                        Description = file,
+                        Description = Path.GetFileNameWithoutExtension(file),
                         FileName = file,
                         FilePath = $"/files/{file}",
                         CreatedAt = DateTime.UtcNow
@@ -194,9 +139,6 @@ else
             }
 
             await db.SaveChangesAsync();
-
-            messageType = "info";
-            message = "Files synced successfully.";
         }
         catch (Exception ex)
         {
@@ -204,15 +146,11 @@ else
         }
     }
 
-    // =========================
-    // LOAD DB
-    // =========================
     private async Task LoadDownloads()
     {
         try
         {
             using var db = DbFactory.CreateDbContext();
-
             downloads = await db.Downloads
                 .AsNoTracking()
                 .OrderByDescending(x => x.CreatedAt)
@@ -225,36 +163,6 @@ else
         }
     }
 
-    // =========================
-    // LOAD TOP 3 FILES
-    // =========================
-    private void LoadStaticFiles()
-    {
-        staticFiles.Clear();
-
-        var path = Path.Combine(Env.WebRootPath!, "files");
-
-        if (!Directory.Exists(path))
-            return;
-
-        var files = Directory.GetFiles(path)
-            .Select(f => new FileInfo(f))
-            .OrderByDescending(f => f.CreationTime)
-            .Take(3);
-
-        foreach (var file in files)
-        {
-            staticFiles.Add(new StaticFileItem
-            {
-                FileName = file.Name,
-                Url = $"/files/{file.Name}"
-            });
-        }
-    }
-
-    // =========================
-    // DELETE A FILE (disk + DB)
-    // =========================
     private async Task DeleteFile(string fileName)
     {
         try
@@ -267,16 +175,14 @@ else
                 message = "Unauthorized";
                 return;
             }
+
             var folder = Path.Combine(Env.WebRootPath!, "files");
             var fullPath = Path.Combine(folder, fileName);
 
             if (File.Exists(fullPath))
-            {
                 File.Delete(fullPath);
-            }
 
             using var db = DbFactory.CreateDbContext();
-
             var entity = await db.Downloads.FirstOrDefaultAsync(x => x.FileName == fileName);
             if (entity != null)
             {
@@ -285,7 +191,6 @@ else
             }
 
             await LoadDownloads();
-            LoadStaticFiles();
 
             messageType = "success";
             message = $"Deleted {fileName}.";
@@ -298,9 +203,6 @@ else
         }
     }
 
-    // =========================
-    // PDF MERGE UPLOAD
-    // =========================
     private async Task HandlePdfUpload(InputFileChangeEventArgs e)
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -317,7 +219,6 @@ else
         try
         {
             var files = e.GetMultipleFiles();
-
             if (files.Count == 0)
                 return;
 
@@ -330,46 +231,33 @@ else
             {
                 await using var stream = file.OpenReadStream(50_000_000);
                 var ms = new MemoryStream();
-
                 await stream.CopyToAsync(ms);
                 ms.Position = 0;
-
                 streams.Add(ms);
 
                 var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
-
                 foreach (var page in inputDoc.Pages)
-                {
                     outputDoc.AddPage(page);
-                }
             }
 
-            // Build a display name and a safe-on-disk file name from the
-            // original uploaded file name(s) instead of a generic "Merged" label.
             var originalNames = files.Select(f => f.Name).ToList();
-
             var description = originalNames.Count == 1
-                ? originalNames[0]
-                : string.Join(", ", originalNames);
+                ? Path.GetFileNameWithoutExtension(originalNames[0])
+                : string.Join(", ", originalNames.Select(Path.GetFileNameWithoutExtension));
 
             var baseName = Path.GetFileNameWithoutExtension(originalNames[0]);
             foreach (var invalidChar in Path.GetInvalidFileNameChars())
-            {
                 baseName = baseName.Replace(invalidChar, '_');
-            }
 
             var uniqueSuffix = Guid.NewGuid().ToString("N")[..8];
-
             var fileName = originalNames.Count == 1
                 ? $"{baseName}_{uniqueSuffix}.pdf"
                 : $"{baseName}_merged_{uniqueSuffix}.pdf";
 
             var fullPath = Path.Combine(uploadDir, fileName);
-
             outputDoc.Save(fullPath);
 
             using var db = DbFactory.CreateDbContext();
-
             var doc = new Download
             {
                 Description = description,
@@ -377,15 +265,13 @@ else
                 FilePath = $"/files/{fileName}",
                 CreatedAt = DateTime.UtcNow
             };
-
             db.Downloads.Add(doc);
             await db.SaveChangesAsync();
 
             downloads.Insert(0, doc);
-            LoadStaticFiles();
 
             messageType = "success";
-            message = "PDF uploaded and merged successfully!";
+            message = "PDF uploaded successfully!";
         }
         catch (Exception ex)
         {
@@ -398,39 +284,5 @@ else
             foreach (var s in streams)
                 s.Dispose();
         }
-    }
-
-    private Task RunPdfMergeOnLargeStackThread(List<MemoryStream> streams, string outputPath)
-    {
-        var tcs = new TaskCompletionSource();
-
-        var thread = new Thread(() =>
-        {
-            try
-            {
-                using var outputDoc = new PdfDocument();
-
-                foreach (var ms in streams)
-                {
-                    ms.Position = 0;
-                    var inputDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import);
-
-                    foreach (var page in inputDoc.Pages)
-                    {
-                        outputDoc.AddPage(page);
-                    }
-                }
-
-                outputDoc.Save(outputPath);
-                tcs.SetResult();
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-        }, maxStackSize: 64 * 1024 * 1024); // 64 MB, well above the 1MB default
-
-        thread.Start();
-        return tcs.Task;
     }
 }

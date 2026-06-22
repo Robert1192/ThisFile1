@@ -10,7 +10,7 @@ public class AuthController : Controller
         => _signInManager = signInManager;
 
     [HttpPost("Login")]
-    [IgnoreAntiforgeryToken]  // ← this fixes it
+    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> Login(string email, string password)
     {
         var result = await _signInManager.PasswordSignInAsync(
@@ -19,5 +19,13 @@ public class AuthController : Controller
         return result.Succeeded
             ? Redirect("/")
             : Redirect("/login?Error=1");
+    }
+
+    [HttpPost("Logout")]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Redirect("/login");
     }
 }
