@@ -169,7 +169,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Controllers\\AuthController.cs",
               "RelativeToolTip": "ProjectWebsite10032026\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAIBJwDAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-22T10:18:39.679Z",
               "EditorCaption": ""
@@ -194,7 +194,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Pages\\Login.razor",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Pages\\Login.razor",
               "RelativeToolTip": "ProjectWebsite10032026\\Pages\\Login.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACUAAAAAAAAAAAAowDoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-06-18T12:02:16.372Z",
               "EditorCaption": ""
@@ -232,7 +232,7 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Program.cs",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Program.cs",
               "RelativeToolTip": "ProjectWebsite10032026\\Program.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAowC0AAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-02T09:02:08.694Z",
               "EditorCaption": ""
@@ -257,9 +257,10 @@
               "RelativeDocumentMoniker": "ProjectWebsite10032026\\Data\\IdentitySeed.cs",
               "ToolTip": "C:\\Users\\Robert\\source\\repos\\ProjectWebsite10032026\\ThisFile1\\ProjectWebsite10032026\\Data\\IdentitySeed.cs",
               "RelativeToolTip": "ProjectWebsite10032026\\Data\\IdentitySeed.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwA4AAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAIBJwA4AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-18T12:01:07.286Z"
+              "WhenOpened": "2026-06-18T12:01:07.286Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

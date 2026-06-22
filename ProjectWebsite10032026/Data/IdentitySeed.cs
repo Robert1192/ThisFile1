@@ -29,6 +29,20 @@ namespace ProjectWebsite10032026.Data
                     await userManager.AddToRoleAsync(admin, adminRole);
                 }
             }
+            else
+            {
+                // Reset the admin password to the configured value to ensure you can log in after deploy
+                try
+                {
+                    var token = await userManager.GeneratePasswordResetTokenAsync(admin);
+                    var resetResult = await userManager.ResetPasswordAsync(admin, token, adminPassword);
+                    // optionally, inspect resetResult.Errors or log if needed
+                }
+                catch
+                {
+                    // swallow exceptions during seed to avoid breaking startup; use logging in production
+                }
+            }
         }
     }
 }

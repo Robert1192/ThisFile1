@@ -3,73 +3,109 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using ProjectWebsite10032026.Data;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Blazor
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-
-// Add HttpContextAccessor for Identity
-builder.Services.AddHttpContextAccessor();
-
-// Connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-if (string.IsNullOrWhiteSpace(connectionString))
+public class Program
 {
-    throw new InvalidOperationException("Missing DefaultConnection in appsettings.json");
-}
-
-// EF Core DbContextFactory
-builder.Services.AddDbContextFactory<AppDbContext>(options =>
-    options.UseSqlServer(connectionString, sqlOptions =>
+    public static async Task Main(string[] args)
     {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorNumbersToAdd: null);
-    }));
+        var builder = WebApplication.CreateBuilder(args);
 
-// Regular DbContext for Identity stores
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+        // =========================
+        // BLazor
+        // =========================
+        builder.Services.AddRazorPages();
+        builder.Services.AddServerSideBlazor();
 
-// Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireDigit = false;
-    options.SignIn.RequireConfirmedAccount = false;
-})
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+        builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthorization();
+        // =========================
+        // DB
+        // =========================
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Provide Blazor Server authentication state from Identity
-builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new InvalidOperationException("Missing DefaultConnection in appsettings.json");
 
-// Add controllers for API endpoints (login POST)
-builder.Services.AddControllers();
+        builder.Services.AddDbContextFactory<AppDbContext>(options =>
+            options.UseSqlServer(connectionString));
 
-var app = builder.Build();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(connectionString));
 
-// Seed admin user
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
+        // =========================
+        // Identity
+        // =========================
+        builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+        {
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = false;
+            options.SignIn.RequireConfirmedAccount = false;
+        })
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<AppDbContext>();
+
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddControllers();
+
+        var app = builder.Build();
+
+        // =========================
+        // SEED USERS
+        // =========================
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            await SeedUsersAsync(userManager, roleManager);
+        }
+
+        // =========================
+        // PIPELINE
+        // =========================
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+        app.MapBlazorHub();
+        app.MapFallbackToPage("/_Host");
+
+        await app.RunAsync();
+    }
+
+    // =========================
+    // SEED METHOD
+    // =========================
+    private static async Task SeedUsersAsync(
+        UserManager<IdentityUser> userManager,
+        RoleManager<IdentityRole> roleManager)
     {
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
+        // ROLE
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
             await roleManager.CreateAsync(new IdentityRole("Admin"));
         }
 
+        // =========================
+        // ADMIN USER
+        // =========================
         var adminEmail = "admin@example.com";
+        var adminPassword = "Admin@Secure#2026!X9";
+
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
@@ -81,40 +117,41 @@ using (var scope = app.Services.CreateScope())
                 EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(adminUser, "Admin@Secure#2026");
-
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-                Console.WriteLine("Admin user created successfully!");
-                Console.WriteLine("Email: admin@example.com");
-                Console.WriteLine("Password: Admin@Secure#2026");
-            }
+            await userManager.CreateAsync(adminUser);
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error creating admin user: {ex.Message}");
+
+        // FORCE PASSWORD (always correct)
+        var adminToken = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+        await userManager.ResetPasswordAsync(adminUser, adminToken, adminPassword);
+
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+
+        Console.WriteLine($"Admin: {adminEmail} / {adminPassword}");
+
+        // =========================
+        // NORMAL USER
+        // =========================
+        var userEmail = "user@test.com";
+        var userPassword = "User@Strong#2026!Q7";
+
+        var normalUser = await userManager.FindByEmailAsync(userEmail);
+
+        if (normalUser == null)
+        {
+            normalUser = new IdentityUser
+            {
+                UserName = userEmail,
+                Email = userEmail,
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(normalUser);
+        }
+
+        // FORCE PASSWORD (always correct)
+        var userToken = await userManager.GeneratePasswordResetTokenAsync(normalUser);
+        await userManager.ResetPasswordAsync(normalUser, userToken, userPassword);
+
+        Console.WriteLine($"User: {userEmail} / {userPassword}");
     }
 }
-
-// Pipeline
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-app.MapBlazorHub();
-app.MapControllers();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
