@@ -1,6 +1,4 @@
 @page "/login"
-@using Microsoft.AspNetCore.Antiforgery
-@inject IAntiforgery Antiforgery
 @inject IHttpContextAccessor HttpContextAccessor
 
 <h3>Login</h3>
@@ -11,8 +9,6 @@
 }
 
 <form method="post" action="/Account/Login">
-    <input type="hidden" name="__RequestVerificationToken" value="@token" />
-
     <input name="Email"
            type="email"
            placeholder="Email"
@@ -27,7 +23,6 @@
 </form>
 
 @code {
-    private string token = "";
     private string? errorMessage;
 
     [SupplyParameterFromQuery]
@@ -35,10 +30,6 @@
 
     protected override void OnInitialized()
     {
-        var context = HttpContextAccessor.HttpContext!;
-        var tokens = Antiforgery.GetAndStoreTokens(context);
-        token = tokens.RequestToken!;
-
         if (Error == "1")
             errorMessage = "Invalid email or password.";
     }
