@@ -1,12 +1,8 @@
 @page "/login"
 @using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Components.Authorization
-@using ProjectWebsite10032026.Data
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using System.Text.Json
+@inject IJSRuntime JS
 @inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthProvider
 
 <h3>Login</h3>
 
@@ -36,20 +32,29 @@
     {
         try
         {
-            var result = await SignInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, isPersistent: false, lockoutOnFailure: false);
-            if (result.Succeeded)
+            var result = await JS.InvokeAsync<JsonElement>("auth.postJson", "/api/auth/login", loginModel);
+            var status = result.GetProperty("status").GetInt32();
+            var body = result.GetProperty("body").GetString();
+            if (status == 200)
             {
-                // Notify the authentication state provider
-                if (AuthProvider is IdentityAuthenticationStateProvider authProvider)
-                {
-                    authProvider.NotifyUserAuthentication(loginModel.Email);
-                }
-                
                 Navigation.NavigateTo("/", true);
+            }
+            else if (status == 401)
+            {
+                error = "Invalid login attempt.";
             }
             else
             {
-                error = "Invalid login attempt.";
+                try
+                {
+                    var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(body ?? "{}");
+                    if (dict != null && dict.ContainsKey("error")) error = dict["error"];
+                    else error = "Login failed.";
+                }
+                catch
+                {
+                    error = "Login failed.";
+                }
             }
         }
         catch (Exception ex)

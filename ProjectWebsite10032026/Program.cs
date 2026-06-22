@@ -47,8 +47,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddAuthorization();
 
-// Add custom AuthenticationStateProvider
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityAuthenticationStateProvider>();
+// Provide Blazor Server authentication state from Identity
+builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+
+// Add controllers for API endpoints (login POST)
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -109,7 +112,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapBlazorHub();
+app.MapControllers();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
