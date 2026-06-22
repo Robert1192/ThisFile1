@@ -1,59 +1,45 @@
 @page "/login"
-@using System.ComponentModel.DataAnnotations
-@inject HttpClient Http
-@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery Antiforgery
+@inject IHttpContextAccessor HttpContextAccessor
 
 <h3>Login</h3>
 
-@if (!string.IsNullOrEmpty(error))
+@if (!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger">@error</div>
+    <div class="alert alert-danger">@errorMessage</div>
 }
 
-<EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator />
+<form method="post" action="/Account/Login">
+    <input type="hidden" name="__RequestVerificationToken" value="@token" />
 
-    <InputText @bind-Value="loginModel.Email"
-               placeholder="Email"
-               class="form-control mb-2" />
+    <input name="Email"
+           type="email"
+           placeholder="Email"
+           class="form-control mb-2" />
 
-    <InputText @bind-Value="loginModel.Password"
-               type="password"
-               placeholder="Password"
-               class="form-control mb-2" />
+    <input name="Password"
+           type="password"
+           placeholder="Password"
+           class="form-control mb-2" />
 
-    <button type="submit" class="btn btn-primary">
-        Log in
-    </button>
-</EditForm>
+    <button type="submit" class="btn btn-primary">Log in</button>
+</form>
 
 @code {
-    private string? error;
+    private string token = "";
+    private string? errorMessage;
 
-    private LoginModel loginModel = new();
+    [SupplyParameterFromQuery]
+    public string? Error { get; set; }
 
-    public class LoginModel
+    protected override void OnInitialized()
     {
-        [Required]
-        public string Email { get; set; } = string.Empty;
+        var context = HttpContextAccessor.HttpContext!;
+        var tokens = Antiforgery.GetAndStoreTokens(context);
+        token = tokens.RequestToken!;
 
-        [Required]
-        public string Password { get; set; } = string.Empty;
-    }
-
-    private async Task HandleLogin()
-    {
-        error = null;
-
-        var response = await Http.PostAsJsonAsync("/api/login", loginModel);
-
-        if (response.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("/", forceLoad: true);
-        }
-        else
-        {
-            error = "Invalid login attempt.";
-        }
+        if (Error == "1")
+            errorMessage = "Invalid email or password.";
     }
 }

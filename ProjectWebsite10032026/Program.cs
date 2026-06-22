@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectWebsite10032026.Data;
 
 public class Program
@@ -16,6 +17,18 @@ public class Program
         builder.Services.AddServerSideBlazor();
 
         builder.Services.AddHttpContextAccessor();
+
+        // =========================
+        // HttpClient (FIXED LOCATION)
+        // =========================
+        builder.Services.AddScoped(sp =>
+        {
+            var nav = sp.GetRequiredService<NavigationManager>();
+            return new HttpClient
+            {
+                BaseAddress = new Uri(nav.BaseUri)
+            };
+        });
 
         // =========================
         // DB
@@ -45,7 +58,6 @@ public class Program
         .AddEntityFrameworkStores<AppDbContext>();
 
         builder.Services.AddAuthorization();
-
         builder.Services.AddControllers();
 
         var app = builder.Build();
@@ -88,20 +100,22 @@ public class Program
     }
 
     // =========================
-    // SEED METHOD
+    // SEED METHOD (FIXED)
     // =========================
     private static async Task SeedUsersAsync(
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
+        // =========================
         // ROLE
+        // =========================
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
             await roleManager.CreateAsync(new IdentityRole("Admin"));
         }
 
         // =========================
-        // ADMIN USER
+        // ADMIN
         // =========================
         var adminEmail = "admin@example.com";
         var adminPassword = "Admin@Secure#2026!X9";
@@ -117,14 +131,18 @@ public class Program
                 EmailConfirmed = true
             };
 
-            await userManager.CreateAsync(adminUser);
+            await userManager.CreateAsync(adminUser, adminPassword);
+        }
+        else
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+            await userManager.ResetPasswordAsync(adminUser, token, adminPassword);
         }
 
-        // FORCE PASSWORD (always correct)
-        var adminToken = await userManager.GeneratePasswordResetTokenAsync(adminUser);
-        await userManager.ResetPasswordAsync(adminUser, adminToken, adminPassword);
-
-        await userManager.AddToRoleAsync(adminUser, "Admin");
+        if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
 
         Console.WriteLine($"Admin: {adminEmail} / {adminPassword}");
 
@@ -145,12 +163,13 @@ public class Program
                 EmailConfirmed = true
             };
 
-            await userManager.CreateAsync(normalUser);
+            await userManager.CreateAsync(normalUser, userPassword);
         }
-
-        // FORCE PASSWORD (always correct)
-        var userToken = await userManager.GeneratePasswordResetTokenAsync(normalUser);
-        await userManager.ResetPasswordAsync(normalUser, userToken, userPassword);
+        else
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(normalUser);
+            await userManager.ResetPasswordAsync(normalUser, token, userPassword);
+        }
 
         Console.WriteLine($"User: {userEmail} / {userPassword}");
     }
